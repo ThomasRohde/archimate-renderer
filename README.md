@@ -229,6 +229,47 @@ To execute tests:
 npm test
 ```
 
+## Releases and Versioning
+
+This project follows [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH) and uses GitHub Actions for automated releases.
+
+### Creating a Release
+
+To create a new release:
+
+1. Ensure all changes for the release are merged to the main branch
+2. Create and push a tag for a minor release (x.y.0):
+
+```bash
+# Example for creating a v1.2.0 release
+git checkout main
+git pull
+git tag v1.2.0
+git push origin v1.2.0
+```
+
+### Automated Release Process
+
+When a minor release tag (e.g., v1.2.0) is pushed, the GitHub Actions workflow automatically:
+
+1. Builds the project
+2. Publishes the package to npm
+3. Creates a GitHub Release with auto-generated release notes
+4. Updates the version in package.json to the next patch version (e.g., v1.2.1)
+5. Creates a new tag for the next patch version
+
+This automation helps maintain a consistent release process and prepares the repository for the next development cycle.
+
+### Manual Releases
+
+For patch releases or other manual publishing:
+
+1. Navigate to the GitHub Actions tab in the repository
+2. Select the "CI/CD" workflow
+3. Click "Run workflow"
+4. Select the branch and set "Publish to npm" to true
+5. Click "Run workflow"
+
 ## Core Components
 
 ### ArchiMateRenderer Class
