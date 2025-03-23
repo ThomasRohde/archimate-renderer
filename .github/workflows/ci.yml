@@ -109,10 +109,14 @@ jobs:
             git log --pretty=format:"- %s" > "$TEMP_CHANGELOG"
           fi
           
-          # Set the changelog as an output using the correct multiline syntax
-          echo "CHANGELOG<<CHANGELOG_DELIMITER" >> $GITHUB_OUTPUT
-          cat "$TEMP_CHANGELOG" >> $GITHUB_OUTPUT
-          echo "CHANGELOG_DELIMITER" >> $GITHUB_OUTPUT
+          # Read the changelog into a variable and escape newlines
+          CHANGELOG_CONTENT=$(cat "$TEMP_CHANGELOG" | sed 's/$/\\n/' | tr -d '\n')
+          
+          # Set the changelog as an output
+          echo "CHANGELOG=$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
+          
+          # Clean up temporary file
+          rm "$TEMP_CHANGELOG"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
