@@ -5,6 +5,7 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
+  "browser": "dist/umd/archimate-renderer.min.js",
   "bin": {
     "archimate-renderer": "./dist/cjs/cli.js"
   },
@@ -12,6 +13,7 @@
     ".": {
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js",
+      "browser": "./dist/umd/archimate-renderer.min.js",
       "types": "./dist/types/index.d.ts"
     }
   },
