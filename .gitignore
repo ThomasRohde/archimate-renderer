@@ -1,7 +1,7 @@
 # Dependency directories
 node_modules/
 elements-java/
-
+archimate-viewer-test.html
 # Build outputs
 dist/
 coverage/
