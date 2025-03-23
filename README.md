@@ -260,6 +260,15 @@ When a minor release tag (e.g., v1.2.0) is pushed, the GitHub Actions workflow a
 
 This automation helps maintain a consistent release process and prepares the repository for the next development cycle.
 
+### Repository Setup for Automated Releases
+
+If your repository has branch protection rules (e.g., requiring pull requests for the main branch), you'll need to set up a Personal Access Token (PAT) with the `repo` scope:
+
+1. Create a PAT in your GitHub account settings (Settings > Developer settings > Personal access tokens)
+2. Add the PAT as a repository secret named `RELEASE_PAT`
+
+This allows the workflow to push version updates to protected branches.
+
 ### Manual Releases
 
 For patch releases or other manual publishing:

@@ -51,6 +51,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Update package.json version from tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          # Extract version from tag (remove 'v' prefix)
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Setting package.json version to $TAG_VERSION"
+          
+          # Update package.json with the tag version
+          npm version $TAG_VERSION --no-git-tag-version --allow-same-version
+
       - name: Build (ensure fresh build)
         run: npm run build
 
@@ -89,7 +99,16 @@ jobs:
         run: |
           # Extract changes since the last release
           echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
-          git log $(git describe --tags --abbrev=0 HEAD^)..HEAD --pretty=format:"- %s" >> $GITHUB_OUTPUT
+          
+          # Check if there are previous tags
+          if git describe --tags --abbrev=0 HEAD^ 2>/dev/null; then
+            # If there are previous tags, get changes since the last tag
+            git log $(git describe --tags --abbrev=0 HEAD^)..HEAD --pretty=format:"- %s" >> $GITHUB_OUTPUT
+          else
+            # If this is the first tag, get all changes
+            git log --pretty=format:"- %s" >> $GITHUB_OUTPUT
+          fi
+          
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
@@ -102,7 +121,7 @@ jobs:
             
             ## Installation
             ```
-            npm install @archimate/renderer
+            npm install archimate-renderer
             ```
           files: |
             dist/*
@@ -119,7 +138,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # Use PAT if available, otherwise fall back to GITHUB_TOKEN
+          # A PAT with repo scope is needed if you have branch protection rules
+          token: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}
       
       - name: Setup Node.js
         uses: actions/setup-node@v3
