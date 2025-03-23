@@ -1,9 +1,8 @@
 # ArchiMate Renderer
 [![npm version](https://img.shields.io/npm/v/archimate-renderer.svg)](https://www.npmjs.com/package/archimate-renderer)
-[![Build Status](https://img.shields.io/travis/archimate-renderer/archimate-renderer.svg)](https://travis-ci.org/archimate-renderer/archimate-renderer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Built with TypeScript](https://img.shields.io/badge/Built%20with-TypeScript-blue.svg)](https://www.typescriptlang.org)
-[![Node.js](https://img.shields.io/badge/Node.js-v12.0+-green.svg)](https://nodejs.org)
+[![Node.js](https://img.shields.io/badge/Node.js-v22.0+-green.svg)](https://nodejs.org)
 
 A TypeScript library for rendering ArchiMate models as SVG in both Node.js and browser environments.
 
@@ -140,6 +139,74 @@ const svgContent = renderer.renderView({ id: 'view-123' });
 import { shapeRegistry, ArchiMateElementType } from 'archimate-renderer';
 shapeRegistry.registerElementShape(ArchiMateElementType.BusinessActor, customShapeFunction);
 ```
+
+## Browser Usage
+
+You can use ArchiMate Renderer directly in a browser by including the UMD bundle:
+
+### Including via CDN
+
+```html
+<script src="https://unpkg.com/archimate-renderer/dist/umd/archimate-renderer.min.js"></script>
+```
+
+### Minimal Browser Example
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ArchiMate Viewer</title>
+  <style>
+    #diagram-container {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #ccc;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="diagram-container"></div>
+  
+  <script src="https://unpkg.com/archimate-renderer/dist/umd/archimate-renderer.min.js"></script>
+  <script>
+    // Fetch an ArchiMate XML file
+    fetch('your-archimate-model.xml')
+      .then(response => response.text())
+      .then(xmlContent => {
+        // Create a renderer instance
+        const renderer = new ArchiMateRenderer.ArchiMateRenderer();
+        renderer.loadXml(xmlContent);
+        
+        // Get all views from the model
+        const views = renderer.getViews();
+        
+        if (views.length > 0) {
+          // Render the first view
+          const svgContent = ArchiMateRenderer.renderArchiMateView(
+            xmlContent,
+            { id: views[0].id },
+            { width: 1200, height: 800 }
+          );
+          
+          // Display the SVG
+          document.getElementById('diagram-container').innerHTML = svgContent;
+        }
+      })
+      .catch(error => console.error('Error loading model:', error));
+  </script>
+</body>
+</html>
+```
+
+### Global Object in Browser
+
+When included via a script tag, the library exposes a global `ArchiMateRenderer` object with these main components:
+
+- `ArchiMateRenderer.ArchiMateRenderer`: The main renderer class
+- `ArchiMateRenderer.renderArchiMateView`: Utility function for quick rendering
+- `ArchiMateRenderer.shapeRegistry`: For customizing element and relationship shapes
 
 ## Development
 
