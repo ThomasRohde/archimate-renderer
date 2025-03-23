@@ -11,6 +11,48 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import chalk from 'chalk';
 import { ArchiMateRenderer, IArchiMateRendererOptions } from './index';
+import { IArchiMateElement, IArchiMateRelationship } from './types';
+interface IArchiMateView {
+  id: string;
+  name?: string;
+  viewpoint?: string;
+  elements: IArchiMateElement[];
+  relationships: IArchiMateRelationship[];
+}
+
+interface IArchiMateRendererInternal {
+  views: Map<string, IArchiMateView>;
+  elements: Map<string, IArchiMateElement>;
+  relationships: Map<string, IArchiMateRelationship>;
+}
+
+interface IRenderOptions {
+  view?: string;
+  output?: string;
+  width: number;
+  height: number;
+  padding: number;
+  fontFamily: string;
+  fontSize: number;
+}
+
+interface IRenderAllOptions {
+  outputDir: string;
+  width: number;
+  height: number;
+  padding: number;
+  fontFamily: string;
+  fontSize: number;
+}
+
+// Helper to parse numbers from command line options
+const parseNumber = (value: string): number => {
+  const result = parseInt(value, 10);
+  if (isNaN(result)) {
+    throw new Error(`Invalid number: ${value}`);
+  }
+  return result;
+};
 
 // Create the program
 const program = new Command();
@@ -22,49 +64,47 @@ program
   .version('1.0.0');
 
 /**
- * Read XML file from filesystem
- * @param filePath Path to XML file
- * @returns XML content as string
+ * Read XML file from the filesystem.
+ * @param filePath - Path to the XML file.
+ * @returns XML content as a string.
  */
 function readXmlFile(filePath: string): string {
   try {
     return fs.readFileSync(filePath, 'utf-8');
-  } catch (error) {
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err : new Error(String(err));
     console.error(chalk.red(`Error reading file: ${filePath}`));
-    console.error(chalk.red(error instanceof Error ? error.message : String(error)));
+    console.error(chalk.red(error.message));
     process.exit(1);
   }
 }
 
 /**
- * Write SVG content to file
- * @param filePath Path to output file
- * @param svgContent SVG content as string
+ * Write SVG content to a file.
+ * @param filePath - Path to the output file.
+ * @param svgContent - SVG content as a string.
  */
 function writeSvgFile(filePath: string, svgContent: string): void {
   try {
-    // Ensure directory exists
+    // Ensure the directory exists
     fs.ensureDirSync(path.dirname(filePath));
-    
-    // Write file
     fs.writeFileSync(filePath, svgContent, 'utf-8');
     console.log(chalk.green(`SVG saved to: ${filePath}`));
-  } catch (error) {
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err : new Error(String(err));
     console.error(chalk.red(`Error writing file: ${filePath}`));
-    console.error(chalk.red(error instanceof Error ? error.message : String(error)));
+    console.error(chalk.red(error.message));
     process.exit(1);
   }
 }
 
 /**
- * Create a sanitized filename from a string
- * @param name String to sanitize
- * @returns Sanitized filename
+ * Create a sanitized filename from a string.
+ * @param name - The string to sanitize.
+ * @returns A sanitized filename.
  */
 function sanitizeFilename(name: string): string {
-  return name
-    .replace(/[^a-z0-9]/gi, '_')
-    .toLowerCase();
+  return name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
 }
 
 // Command: List views in an ArchiMate model
@@ -72,28 +112,25 @@ program
   .command('list')
   .description('List all views in an ArchiMate model')
   .argument('<file>', 'ArchiMate XML file')
-  .action((file) => {
+  .action((file: string) => {
     try {
-      // Read XML file
       const xmlContent = readXmlFile(file);
-      
-      // Create renderer
       const renderer = new ArchiMateRenderer();
       renderer.loadXml(xmlContent);
-      
-      // Get views
-      const views = Array.from(renderer['views'].entries());
-      
+
+      // Access internal views with type assertion
+      const internalRenderer = renderer as unknown as IArchiMateRendererInternal;
+      const views = Array.from(internalRenderer.views.entries());
+
       if (views.length === 0) {
         console.log(chalk.yellow('No views found in the model.'));
         return;
       }
-      
-      // Display views
+
       console.log(chalk.bold('\nViews in the model:'));
       console.log(chalk.gray('─'.repeat(50)));
-      
-      views.forEach(([id, view]) => {
+
+      for (const [id, view] of views) {
         // Skip duplicate entries (views are indexed by both ID and name)
         if (id === view.id) {
           console.log(chalk.bold(`ID: ${chalk.green(view.id)}`));
@@ -103,10 +140,11 @@ program
           console.log(`Relationships: ${view.relationships.length}`);
           console.log(chalk.gray('─'.repeat(50)));
         }
-      });
-    } catch (error) {
+      }
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
       console.error(chalk.red('Error listing views:'));
-      console.error(chalk.red(error instanceof Error ? error.message : String(error)));
+      console.error(chalk.red(error.message));
       process.exit(1);
     }
   });
@@ -116,60 +154,51 @@ program
   .command('info')
   .description('Display information about an ArchiMate model')
   .argument('<file>', 'ArchiMate XML file')
-  .action((file) => {
+  .action((file: string) => {
     try {
-      // Read XML file
       const xmlContent = readXmlFile(file);
-      
-      // Create renderer
       const renderer = new ArchiMateRenderer();
       renderer.loadXml(xmlContent);
-      
-      // Get model data
-      const elements = renderer['elements'];
-      const relationships = renderer['relationships'];
-      const views = renderer['views'];
-      
-      // Count elements by type
+
+      const internalRenderer = renderer as unknown as IArchiMateRendererInternal;
+      const { elements, relationships, views } = internalRenderer;
+
       const elementTypes = new Map<string, number>();
       elements.forEach((element) => {
         const count = elementTypes.get(element.type) || 0;
         elementTypes.set(element.type, count + 1);
       });
-      
-      // Count relationships by type
+
       const relationshipTypes = new Map<string, number>();
       relationships.forEach((relationship) => {
         const count = relationshipTypes.get(relationship.type) || 0;
         relationshipTypes.set(relationship.type, count + 1);
       });
-      
-      // Display model information
+
       console.log(chalk.bold('\nArchiMate Model Information:'));
       console.log(chalk.gray('─'.repeat(50)));
-      
+
       console.log(chalk.bold('Elements:'), elements.size);
       elementTypes.forEach((count, type) => {
         console.log(`  ${type}: ${count}`);
       });
-      
+
       console.log(chalk.bold('\nRelationships:'), relationships.size);
       relationshipTypes.forEach((count, type) => {
         console.log(`  ${type}: ${count}`);
       });
-      
-      // Count unique views (exclude name entries)
+
       const uniqueViews = new Set<string>();
       views.forEach((view) => {
         uniqueViews.add(view.id);
       });
-      
+
       console.log(chalk.bold('\nViews:'), uniqueViews.size);
       console.log(chalk.gray('─'.repeat(50)));
-      
-    } catch (error) {
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
       console.error(chalk.red('Error displaying model information:'));
-      console.error(chalk.red(error instanceof Error ? error.message : String(error)));
+      console.error(chalk.red(error.message));
       process.exit(1);
     }
   });
@@ -179,66 +208,54 @@ program
   .command('render')
   .description('Render a specific view from an ArchiMate model as SVG')
   .argument('<file>', 'ArchiMate XML file')
-  .option('-v, --view <id>', 'ID or name of the view to render')
-  .option('-o, --output <file>', 'Output SVG file')
-  .option('-w, --width <width>', 'SVG width in pixels', '1200')
-  .option('-h, --height <height>', 'SVG height in pixels', '800')
-  .option('-p, --padding <padding>', 'SVG padding in pixels', '20')
-  .option('-f, --font-family <font>', 'Font family', 'Arial, sans-serif')
-  .option('-s, --font-size <size>', 'Font size in pixels', '12')
-  .action((file, options) => {
+  .option('-v, --view <view>', 'ID or name of the view to render')
+  .option('-o, --output <output>', 'Output SVG file')
+  .option('-w, --width <width>', 'SVG width in pixels', parseNumber, 1200)
+  // Changed short flag for height to -H to avoid conflict with help (-h)
+  .option('-H, --height <height>', 'SVG height in pixels', parseNumber, 800)
+  .option('-p, --padding <padding>', 'SVG padding in pixels', parseNumber, 20)
+  .option('-f, --font-family <fontFamily>', 'Font family', 'Arial, sans-serif')
+  .option('-s, --font-size <fontSize>', 'Font size in pixels', parseNumber, 12)
+  .action((file: string, options: IRenderOptions) => {
     try {
-      // Read XML file
       const xmlContent = readXmlFile(file);
-      
-      // Create renderer with options
       const rendererOptions: IArchiMateRendererOptions = {
-        width: parseInt(options.width, 10),
-        height: parseInt(options.height, 10),
-        padding: parseInt(options.padding, 10),
+        width: options.width,
+        height: options.height,
+        padding: options.padding,
         fontFamily: options.fontFamily,
-        fontSize: parseInt(options.fontSize, 10),
+        fontSize: options.fontSize,
       };
-      
+
       const renderer = new ArchiMateRenderer(rendererOptions);
       renderer.loadXml(xmlContent);
-      
-      // If no view ID/name is provided, list available views
+
       if (!options.view) {
         console.log(chalk.yellow('No view specified. Available views:'));
-        
-        // Get views
-        const views = Array.from(renderer['views'].entries());
-        
-        views.forEach(([id, view]) => {
-          // Skip duplicate entries (views are indexed by both ID and name)
+        const internalRenderer = renderer as unknown as IArchiMateRendererInternal;
+        const views = Array.from(internalRenderer.views.entries());
+        for (const [id, view] of views) {
           if (id === view.id) {
             console.log(`ID: ${chalk.green(view.id)}, Name: ${view.name || 'Unnamed'}`);
           }
-        });
-        
+        }
         console.log(chalk.yellow('\nUse --view option to specify a view to render.'));
         return;
       }
-      
-      // Render the view
+
       const svgContent = renderer.renderView({ id: options.view, name: options.view });
-      
-      // Determine output file
-      let outputFile = options.output;
-      
+      let outputFile: string | undefined = options.output;
+
       if (!outputFile) {
-        // If no output file is specified, use the view ID/name
-        const viewName = options.view.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        const viewName = sanitizeFilename(options.view);
         outputFile = `${path.basename(file, path.extname(file))}_${viewName}.svg`;
       }
-      
-      // Write SVG to file
+
       writeSvgFile(outputFile, svgContent);
-      
-    } catch (error) {
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
       console.error(chalk.red('Error rendering view:'));
-      console.error(chalk.red(error instanceof Error ? error.message : String(error)));
+      console.error(chalk.red(error.message));
       process.exit(1);
     }
   });
@@ -248,84 +265,75 @@ program
   .command('render-all')
   .description('Render all views from an ArchiMate model as SVG files')
   .argument('<file>', 'ArchiMate XML file')
-  .option('-o, --output-dir <directory>', 'Output directory for SVG files', './output')
-  .option('-w, --width <width>', 'SVG width in pixels', '1200')
-  .option('-h, --height <height>', 'SVG height in pixels', '800')
-  .option('-p, --padding <padding>', 'SVG padding in pixels', '20')
-  .option('-f, --font-family <font>', 'Font family', 'Arial, sans-serif')
-  .option('-s, --font-size <size>', 'Font size in pixels', '12')
-  .action((file, options) => {
+  .option('-o, --output-dir <outputDir>', 'Output directory for SVG files', './output')
+  .option('-w, --width <width>', 'SVG width in pixels', parseNumber, 1200)
+  // Changed short flag for height to -H to avoid conflict with help (-h)
+  .option('-H, --height <height>', 'SVG height in pixels', parseNumber, 800)
+  .option('-p, --padding <padding>', 'SVG padding in pixels', parseNumber, 20)
+  .option('-f, --font-family <fontFamily>', 'Font family', 'Arial, sans-serif')
+  .option('-s, --font-size <fontSize>', 'Font size in pixels', parseNumber, 12)
+  .action((file: string, options: IRenderAllOptions) => {
     try {
-      // Read XML file
       const xmlContent = readXmlFile(file);
-      
-      // Create renderer with options
       const rendererOptions: IArchiMateRendererOptions = {
-        width: parseInt(options.width, 10),
-        height: parseInt(options.height, 10),
-        padding: parseInt(options.padding, 10),
+        width: options.width,
+        height: options.height,
+        padding: options.padding,
         fontFamily: options.fontFamily,
-        fontSize: parseInt(options.fontSize, 10),
+        fontSize: options.fontSize,
       };
-      
+
       const renderer = new ArchiMateRenderer(rendererOptions);
       renderer.loadXml(xmlContent);
-      
-      // Get views
-      const views = Array.from(renderer['views'].entries());
+
+      const internalRenderer = renderer as unknown as IArchiMateRendererInternal;
+      const views = Array.from(internalRenderer.views.entries());
       const uniqueViewIds = new Set<string>();
-      
-      // Filter out duplicate entries (views are indexed by both ID and name)
-      views.forEach(([id, view]) => {
+
+      for (const [id, view] of views) {
         if (id === view.id) {
           uniqueViewIds.add(view.id);
         }
-      });
-      
+      }
+
       if (uniqueViewIds.size === 0) {
         console.log(chalk.yellow('No views found in the model.'));
         return;
       }
-      
-      // Create output directory
+
       fs.ensureDirSync(options.outputDir);
-      
-      // Render each view
       console.log(chalk.bold(`Rendering ${uniqueViewIds.size} views...`));
-      
+
       let rendered = 0;
-      uniqueViewIds.forEach((viewId) => {
+      for (const viewId of uniqueViewIds) {
         try {
-          const view = renderer['views'].get(viewId);
-          
+          const view = internalRenderer.views.get(viewId);
           if (!view) {
             console.warn(chalk.yellow(`View not found: ${viewId}`));
-            return;
+            continue;
           }
-          
-          // Generate filename
+
           const baseName = path.basename(file, path.extname(file));
           const viewName = view.name ? sanitizeFilename(view.name) : sanitizeFilename(viewId);
           const outputFile = path.join(options.outputDir, `${baseName}_${viewName}.svg`);
-          
-          // Render view
+
           const svgContent = renderer.renderView({ id: viewId });
-          
-          // Write SVG to file
           writeSvgFile(outputFile, svgContent);
           rendered++;
-          
-        } catch (error) {
+        } catch (err: unknown) {
+          const error = err instanceof Error ? err : new Error(String(err));
           console.warn(chalk.yellow(`Error rendering view ${viewId}:`));
-          console.warn(chalk.yellow(error instanceof Error ? error.message : String(error)));
+          console.warn(chalk.yellow(error.message));
         }
-      });
-      
-      console.log(chalk.green(`\nRendered ${rendered} of ${uniqueViewIds.size} views to ${options.outputDir}`));
-      
-    } catch (error) {
+      }
+
+      console.log(
+        chalk.green(`\nRendered ${rendered} of ${uniqueViewIds.size} views to ${options.outputDir}`)
+      );
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
       console.error(chalk.red('Error rendering views:'));
-      console.error(chalk.red(error instanceof Error ? error.message : String(error)));
+      console.error(chalk.red(error.message));
       process.exit(1);
     }
   });
