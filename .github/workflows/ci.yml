@@ -97,19 +97,22 @@ jobs:
       - name: Generate changelog
         id: changelog
         run: |
-          # Extract changes since the last release
-          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          # Create a temporary file for the changelog
+          TEMP_CHANGELOG=$(mktemp)
           
           # Check if there are previous tags
           if git describe --tags --abbrev=0 HEAD^ 2>/dev/null; then
             # If there are previous tags, get changes since the last tag
-            git log $(git describe --tags --abbrev=0 HEAD^)..HEAD --pretty=format:"- %s" >> $GITHUB_OUTPUT
+            git log $(git describe --tags --abbrev=0 HEAD^)..HEAD --pretty=format:"- %s" > "$TEMP_CHANGELOG"
           else
             # If this is the first tag, get all changes
-            git log --pretty=format:"- %s" >> $GITHUB_OUTPUT
+            git log --pretty=format:"- %s" > "$TEMP_CHANGELOG"
           fi
           
-          echo "EOF" >> $GITHUB_OUTPUT
+          # Set the changelog as an output using the correct multiline syntax
+          echo "CHANGELOG<<CHANGELOG_DELIMITER" >> $GITHUB_OUTPUT
+          cat "$TEMP_CHANGELOG" >> $GITHUB_OUTPUT
+          echo "CHANGELOG_DELIMITER" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -152,6 +155,17 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
       
+      - name: Install GitHub CLI
+        run: |
+          # Install GitHub CLI
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt update
+          sudo apt install gh
+          
+          # Authenticate GitHub CLI with the token
+          echo "${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+      
       - name: Get current version and calculate next version
         id: version
         run: |
@@ -168,13 +182,61 @@ jobs:
           # Update package.json with next version
           npm version ${{ steps.version.outputs.NEXT_VERSION }} --no-git-tag-version
       
-      - name: Commit and push changes
+      - name: Create branch for version update
         run: |
+          # Create a new branch for the version update
+          VERSION_BRANCH="version-bump-${{ steps.version.outputs.NEXT_VERSION }}"
+          git checkout -b $VERSION_BRANCH
+          
+          # Add and commit changes
           git add package.json
           git commit -m "chore: bump version to v${{ steps.version.outputs.NEXT_VERSION }} [skip ci]"
-          git push
+          
+          # Push the branch
+          git push origin $VERSION_BRANCH
+      
+      - name: Create Pull Request or push directly
+        id: create_pr
+        # Try to create a PR first, if it fails (e.g., no branch protection), push directly
+        run: |
+          # Try to create a PR using GitHub CLI
+          if command -v gh &> /dev/null; then
+            echo "Creating PR using GitHub CLI..."
+            PR_URL=$(gh pr create --title "chore: bump version to v${{ steps.version.outputs.NEXT_VERSION }}" \
+                              --body "Automated version bump to v${{ steps.version.outputs.NEXT_VERSION }} after release v${{ steps.version.outputs.CURRENT_VERSION }}" \
+                              --base main \
+                              --head "version-bump-${{ steps.version.outputs.NEXT_VERSION }}" || echo "PR_FAILED")
+            
+            if [ "$PR_URL" != "PR_FAILED" ]; then
+              echo "PR created: $PR_URL"
+              echo "PR_CREATED=true" >> $GITHUB_OUTPUT
+              echo "PR_URL=$PR_URL" >> $GITHUB_OUTPUT
+            else
+              echo "Failed to create PR, will try direct push"
+              echo "PR_CREATED=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "GitHub CLI not available, will try direct push"
+            echo "PR_CREATED=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Push directly if PR creation failed
+        if: steps.create_pr.outputs.PR_CREATED != 'true'
+        run: |
+          # Try to push directly to main
+          git checkout main
+          git pull
+          
+          # Update version in package.json
+          npm version ${{ steps.version.outputs.NEXT_VERSION }} --no-git-tag-version
+          
+          # Commit and push
+          git add package.json
+          git commit -m "chore: bump version to v${{ steps.version.outputs.NEXT_VERSION }} [skip ci]"
+          git push || echo "Direct push failed, manual intervention required"
       
       - name: Create and push new tag
         run: |
+          # Create tag on the current branch
           git tag v${{ steps.version.outputs.NEXT_VERSION }}
           git push origin v${{ steps.version.outputs.NEXT_VERSION }}

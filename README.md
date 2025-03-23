@@ -267,7 +267,19 @@ If your repository has branch protection rules (e.g., requiring pull requests fo
 1. Create a PAT in your GitHub account settings (Settings > Developer settings > Personal access tokens)
 2. Add the PAT as a repository secret named `RELEASE_PAT`
 
-This allows the workflow to push version updates to protected branches.
+With this setup, the workflow will:
+- For repositories without branch protection: Directly push version updates to the main branch
+- For repositories with branch protection: Create a pull request for the version update
+
+This approach ensures the workflow works with any repository configuration, including those with strict branch protection rules.
+
+### Troubleshooting Releases
+
+If you encounter issues with the automated release process:
+
+1. **npm publishing errors**: The workflow automatically sets the package.json version to match the tag before publishing
+2. **Changelog generation issues**: The workflow handles repositories with or without previous tags
+3. **Permission errors**: Make sure you've set up the RELEASE_PAT secret if you have branch protection rules
 
 ### Manual Releases
 
