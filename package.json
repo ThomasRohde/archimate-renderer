@@ -1,6 +1,6 @@
 {
   "name": "archimate-renderer",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "A library for rendering ArchiMate models as SVG in both Node.js and browser environments",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
