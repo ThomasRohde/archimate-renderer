@@ -1,0 +1,317 @@
+[
+    {
+        "element": "Application Collaboration",
+        "icon": "collaboration",
+        "base": "rectangle"
+    },
+    {
+        "element": "Application Component",
+        "icon": "application-component",
+        "base": "rectangle"
+    },
+    {
+        "element": "Application Event",
+        "icon": "event",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Application Function",
+        "icon": "function",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Application Interaction",
+        "icon": "interaction",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Application Interface",
+        "icon": "interface",
+        "base": "rectangle"
+    },
+    {
+        "element": "Application Process",
+        "icon": "process",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Application Service",
+        "icon": "service",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Artifact",
+        "icon": "artifact",
+        "base": "rectangle"
+    },
+    {
+        "element": "Assessment",
+        "icon": "assessment",
+        "base": "chamfered-rectangle"
+    },
+    {
+        "element": "Business Actor",
+        "icon": "business-actor",
+        "base": "rectangle"
+    },
+    {
+        "element": "Business Collaboration",
+        "icon": "collaboration",
+        "base": "rectangle"
+    },
+    {
+        "element": "Business Event",
+        "icon": "event",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Business Function",
+        "icon": "function",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Business Interaction",
+        "icon": "interaction",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Business Interface",
+        "icon": "interface",
+        "base": "rectangle"
+    },
+    {
+        "element": "Business Object",
+        "icon": "object",
+        "base": "rectangle"
+    },
+    {
+        "element": "Business Process",
+        "icon": "process",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Business Role",
+        "icon": "role",
+        "base": "rectangle"
+    },
+    {
+        "element": "Business Service",
+        "icon": "service",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Capability",
+        "icon": "capability",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Communication Network",
+        "icon": "communication-network",
+        "base": "rectangle"
+    },
+    {
+        "element": "Constraint",
+        "icon": "constraint",
+        "base": "chamfered-rectangle"
+    },
+    {
+        "element": "Contract",
+        "icon": "contract",
+        "base": "rectangle"
+    },
+    {
+        "element": "Course Of Action",
+        "icon": "course-of-action",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Data Object",
+        "icon": "object",
+        "base": "rectangle"
+    },
+    {
+        "element": "Deliverable",
+        "icon": "deliverable",
+        "base": "rectangle"
+    },
+    {
+        "element": "Device",
+        "icon": "device",
+        "base": "rectangle"
+    },
+    {
+        "element": "Distribution Network",
+        "icon": "distribution-network",
+        "base": "rectangle"
+    },
+    {
+        "element": "Driver",
+        "icon": "driver",
+        "base": "chamfered-rectangle"
+    },
+    {
+        "element": "Equipment",
+        "icon": "equipment",
+        "base": "rectangle"
+    },
+    {
+        "element": "Facility",
+        "icon": "facility",
+        "base": "rectangle"
+    },
+    {
+        "element": "Gap",
+        "icon": "gap",
+        "base": "rectangle"
+    },
+    {
+        "element": "Goal",
+        "icon": "goal",
+        "base": "chamfered-rectangle"
+    },
+    {
+        "element": "Implementation Event",
+        "icon": "event",
+        "base": "rectangle"
+    },
+    {
+        "element": "Location",
+        "icon": "location",
+        "base": "rectangle"
+    },
+    {
+        "element": "Material",
+        "icon": "material",
+        "base": "rectangle"
+    },
+    {
+        "element": "Meaning",
+        "icon": "meaning",
+        "base": "chamfered-rectangle"
+    },
+    {
+        "element": "Node",
+        "icon": "node",
+        "base": "rectangle"
+    },
+    {
+        "element": "Outcome",
+        "icon": "outcome",
+        "base": "chamfered-rectangle"
+    },
+    {
+        "element": "Path",
+        "icon": "path",
+        "base": "rectangle"
+    },
+    {
+        "element": "Plateau",
+        "icon": "plateau",
+        "base": "rectangle"
+    },
+    {
+        "element": "Principle",
+        "icon": "principle",
+        "base": "chamfered-rectangle"
+    },
+    {
+        "element": "Product",
+        "icon": "product",
+        "base": "rectangle"
+    },
+    {
+        "element": "Representation",
+        "icon": "representation",
+        "base": "rectangle"
+    },
+    {
+        "element": "Requirement",
+        "icon": "requirement",
+        "base": "chamfered-rectangle"
+    },
+    {
+        "element": "Resource",
+        "icon": "resource",
+        "base": "rectangle"
+    },
+    {
+        "element": "Stakeholder",
+        "icon": "role",
+        "base": "chamfered-rectangle"
+    },
+    {
+        "element": "System Software",
+        "icon": "system-software",
+        "base": "rectangle"
+    },
+    {
+        "element": "Technology Collaboration",
+        "icon": "collaboration",
+        "base": "rectangle"
+    },
+    {
+        "element": "Technology Event",
+        "icon": "event",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Technology Function",
+        "icon": "function",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Technology Interaction",
+        "icon": "interaction",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Technology Interface",
+        "icon": "interface",
+        "base": "rectangle"
+    },
+    {
+        "element": "Technology Process",
+        "icon": "process",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Technology Service",
+        "icon": "service",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Value Stream",
+        "icon": "value-stream",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Value",
+        "icon": "value",
+        "base": "chamfered-rectangle"
+    },
+    {
+        "element": "Work Package",
+        "icon": "work-package",
+        "base": "rounded-rectangle"
+    },
+    {
+        "element": "Relationship",
+        "icon": "path",
+        "base": "rectangle"
+    },
+    {
+        "element": "And Junction",
+        "icon": "none",
+        "base": "circle"
+    },
+    {
+        "element": "Or Junction",
+        "icon": "none",
+        "base": "circle"
+    },
+    {
+        "element": "Group",
+        "icon": "none",
+        "base": "rectangle"
+    }
+]

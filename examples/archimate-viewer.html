@@ -1,0 +1,502 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>ArchiMate Renderer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#000000',
+            secondary: '#3f37c9',
+            accent: '#4cc9f0',
+            success: '#4ade80',
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+          },
+          animation: {
+            dots: 'dots 1.5s infinite',
+          },
+          keyframes: {
+            dots: {
+              '0%, 20%': { content: '"."' },
+              '40%': { content: '".."' },
+              '60%, 100%': { content: '"..."' },
+            },
+          },
+        }
+      },
+    }
+  </script>
+  <style>
+    @layer utilities {
+      .loading::after {
+        content: "...";
+        animation: dots 1.5s infinite;
+      }
+      
+      @keyframes dots {
+        0%, 20% { content: "."; }
+        40% { content: ".."; }
+        60%, 100% { content: "..."; }
+      }
+    }
+    
+    /* Ensure SVG elements don't create their own stacking context */
+    svg {
+      isolation: isolate;
+      z-index: 1;
+    }
+    
+    /* Tooltip that will be appended to body */
+    #global-tooltip {
+      position: fixed;
+      width: 280px;
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      padding: 1rem;
+      font-size: 0.875rem;
+      color: #1f2937;
+      z-index: 99999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      transform: scale(0.95);
+      text-align: left;
+      font-weight: normal;
+      pointer-events: auto;
+      border: 1px solid #f3f4f6;
+      border-top: 4px solid #4cc9f0;
+    }
+    
+    #global-tooltip.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-200 font-poppins text-gray-800 m-0 p-5 min-h-screen">
+  <div class="max-w-7xl mx-auto p-5">
+    <div class="flex justify-center items-center mb-8">
+      <h1 class="text-primary text-center font-semibold text-4xl drop-shadow">ArchiMate Renderer</h1>
+      <div id="help-button" class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-white font-bold cursor-help ml-3 mt-2">
+        ?
+      </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+      <div class="flex flex-wrap items-center gap-4 mb-6">
+        <div class="flex items-center flex-1 min-w-[200px]">
+          <label for="view-select" class="font-medium mr-3 text-gray-800">View:</label>
+          <select id="view-select" class="flex-1 p-2.5 border border-gray-300 rounded-lg bg-white font-poppins text-base cursor-pointer transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30">
+            <option value="">Loading views...</option>
+          </select>
+        </div>
+        
+        <div id="model-info" class="px-3 py-1.5 bg-gray-100 rounded-lg text-sm text-gray-700 hidden">
+          Model: <span class="font-medium"></span>
+        </div>
+        
+        <div class="hidden">
+          <input type="number" id="width" value="1400" min="100" max="2000" hidden>
+          <input type="number" id="height" value="600" min="100" max="2000" hidden>
+          <input type="checkbox" id="auto-size" checked hidden>
+        </div>
+        
+        <button id="apply-settings" class="bg-primary text-white border-none py-2.5 px-5 rounded-lg font-medium cursor-pointer transition-all duration-300 text-base font-poppins hover:bg-secondary hover:-translate-y-0.5">Render View</button>
+      </div>
+    </div>
+    
+    <div id="diagram-container" class="bg-white rounded-lg shadow-md p-5 min-h-[400px] flex justify-center items-center overflow-hidden relative z-10">
+      <div class="flex justify-center items-center h-full text-primary text-lg loading">Loading diagram</div>
+      <div id="drop-zone" class="absolute inset-0 flex flex-col justify-center items-center bg-primary/10 border-3 border-dashed border-primary rounded-lg z-10 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="text-6xl text-primary mb-4">📄</div>
+        <div class="text-xl font-medium text-primary text-center">Drop your ArchiMate XML file here</div>
+        <div class="mt-4">
+          <label for="file-input" class="bg-primary text-white border-none py-2 px-4 rounded-lg font-medium cursor-pointer transition-all duration-300 text-sm font-poppins hover:bg-secondary">Or select a file</label>
+          <input type="file" id="file-input" class="hidden" accept=".xml,.archimate">
+        </div>
+        <div class="italic text-xs mt-1.5 text-gray-600">Supported file types: .xml and .archimate</div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="../dist/umd/archimate-renderer.min.js"></script>
+  <script>
+    // The library is available as the global variable ArchiMateRenderer
+    let xmlContent = '';
+    let renderer = null;
+    let currentFileName = 'Archisurance.xml';
+    
+    // Function to render the diagram with current settings
+    function renderDiagram() {
+      const selectedViewId = document.getElementById('view-select').value;
+      // Always use auto-size
+      const autoSize = true;
+      
+      if (!selectedViewId) {
+        updateDiagramContent('<div class="flex justify-center items-center h-full text-primary text-lg loading">Please select a view to render</div>');
+        return;
+      }
+      
+      // Show loading indicator
+      updateDiagramContent('<div class="flex justify-center items-center h-full text-primary text-lg loading">Rendering diagram</div>');
+      
+      try {
+        // Create renderer if it doesn't exist
+        if (!renderer) {
+          renderer = new ArchiMateRenderer.ArchiMateRenderer();
+          renderer.loadXml(xmlContent);
+        }
+        
+        // Always use auto-size to determine dimensions
+        const bounds = renderer.computeBounds({ id: selectedViewId });
+        const width = bounds.width + 100;
+        const height = bounds.height + 100;
+        
+        // Update the hidden input fields with the computed values
+        document.getElementById('width').value = width;
+        document.getElementById('height').value = height;
+        
+        // Render the selected view with the determined width and height
+        const svgContent = ArchiMateRenderer.renderArchiMateView(
+          xmlContent,
+          { id: selectedViewId },
+          { width, height }
+        );
+        
+        // Display the SVG
+        updateDiagramContent(svgContent);
+        
+        // Check if scrollbars are needed
+        setTimeout(() => {
+          const diagramContainer = document.getElementById('diagram-container');
+          const svg = diagramContainer.querySelector('svg');
+          
+          if (svg) {
+            // Compare content size to container size
+            const needsScrollX = svg.getBoundingClientRect().width > diagramContainer.clientWidth;
+            const needsScrollY = svg.getBoundingClientRect().height > diagramContainer.clientHeight;
+            
+            // Add or remove overflow class based on content size
+            if (needsScrollX || needsScrollY) {
+              diagramContainer.classList.add('overflow-auto');
+            } else {
+              diagramContainer.classList.remove('overflow-auto');
+            }
+          }
+        }, 100); // Small delay to ensure SVG is fully rendered
+      } catch (error) {
+        console.error('Error rendering view:', error);
+        document.getElementById('diagram-container').innerHTML = 
+          `<p class="text-red-500">Error rendering view: ${error.message}</p>`;
+      }
+    }
+    
+    // Function to extract views using the new getViews utility function
+    function extractViews(xml) {
+      try {
+        // Create a renderer instance and load the XML
+        renderer = new ArchiMateRenderer.ArchiMateRenderer();
+        renderer.loadXml(xml);
+        
+        // Get all views using the new getViews function
+        const views = renderer.getViews();
+        const viewSelect = document.getElementById('view-select');
+        
+        // Clear existing options
+        viewSelect.innerHTML = '';
+        
+        // Sort views by name
+        views.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        
+        // Add options to select
+        views.forEach(view => {
+          const option = document.createElement('option');
+          option.value = view.id;
+          option.textContent = view.name || view.id;
+          viewSelect.appendChild(option);
+        });
+        
+        // If no views were found, add a message
+        if (viewSelect.options.length === 0) {
+          const option = document.createElement('option');
+          option.value = '';
+          option.textContent = 'No views found in the model';
+          viewSelect.appendChild(option);
+        } else {
+          // Select the first view by default
+          viewSelect.selectedIndex = 0;
+          renderDiagram(); // Initial render
+        }
+      } catch (error) {
+        console.error('Error extracting views:', error);
+        document.getElementById('diagram-container').innerHTML = 
+          `<p class="text-red-500">Error extracting views: ${error.message}</p>`;
+      }
+    }
+    
+    // Function to update diagram content while preserving UI elements
+    function updateDiagramContent(content) {
+      const diagramContainer = document.getElementById('diagram-container');
+      
+      // Save references to UI elements we want to preserve
+      const dropZone = document.getElementById('drop-zone');
+      
+      // Update the main content
+      diagramContainer.innerHTML = content;
+      
+      // Recreate and append the drop zone
+      diagramContainer.appendChild(dropZone);
+      
+      // Reattach event listeners for the drop zone
+      setupDropZoneListeners();
+    }
+    
+    // Function to load an ArchiMate XML file
+    function loadArchiMateFile(file) {
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        try {
+          xmlContent = e.target.result;
+          currentFileName = file.name;
+          
+          // Update model info display
+          const modelInfo = document.getElementById('model-info');
+          const modelNameSpan = modelInfo.querySelector('span');
+          modelNameSpan.textContent = currentFileName;
+          modelInfo.classList.remove('hidden');
+          
+          // Extract and render views
+          extractViews(xmlContent);
+          
+          // Show success notification
+          showNotification('Model loaded successfully!', 'success');
+        } catch (error) {
+          console.error('Error processing file:', error);
+          showNotification('Error processing file: ' + error.message, 'error');
+        }
+      };
+      
+      reader.onerror = function() {
+        console.error('Error reading file');
+        showNotification('Error reading file', 'error');
+      };
+      
+      reader.readAsText(file);
+    }
+    
+    // Function to show a notification
+    function showNotification(message, type = 'info') {
+      // Remove any existing notification
+      const existingNotification = document.querySelector('.notification-element');
+      if (existingNotification) {
+        existingNotification.remove();
+      }
+      
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `notification-element fixed bottom-5 left-1/2 transform -translate-x-1/2 p-3 px-5 rounded-lg shadow-md z-[1000] opacity-0 transition-opacity duration-300`;
+      notification.textContent = message;
+      
+      // Set color based on type
+      if (type === 'success') {
+        notification.classList.add('bg-success', 'text-white');
+      } else if (type === 'error') {
+        notification.classList.add('bg-red-500', 'text-white');
+      } else {
+        notification.classList.add('bg-primary', 'text-white');
+      }
+      
+      // Add to document
+      document.body.appendChild(notification);
+      
+      // Trigger animation
+      setTimeout(() => {
+        notification.classList.replace('opacity-0', 'opacity-100');
+      }, 10);
+      
+      // Remove after delay
+      setTimeout(() => {
+        notification.classList.replace('opacity-100', 'opacity-0');
+        setTimeout(() => {
+          notification.remove();
+        }, 300);
+      }, 3000);
+    }
+    
+    // Function to set up drag and drop event listeners
+    function setupDropZoneListeners() {
+      const dropZone = document.getElementById('drop-zone');
+      const fileInput = document.getElementById('file-input');
+      
+      if (!dropZone || !fileInput) return;
+      
+      // Show drop zone when dragging files over the page
+      document.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove('opacity-0', 'pointer-events-none');
+      });
+      
+      document.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Only hide if we're leaving the document
+        const rect = document.body.getBoundingClientRect();
+        if (
+          e.clientX <= rect.left ||
+          e.clientX >= rect.right ||
+          e.clientY <= rect.top ||
+          e.clientY >= rect.bottom
+        ) {
+          dropZone.classList.add('opacity-0', 'pointer-events-none');
+        }
+      });
+      
+      // Handle file drop
+      document.addEventListener('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.add('opacity-0', 'pointer-events-none');
+        
+        if (e.dataTransfer.files.length) {
+          const file = e.dataTransfer.files[0];
+          
+          // Check if it's an XML file
+          if (file.type === 'text/xml' || file.name.endsWith('.xml')) {
+            loadArchiMateFile(file);
+          } else {
+            showNotification('Please drop an ArchiMate XML file (.xml)', 'error');
+          }
+        }
+      });
+      
+      // Handle file selection via button
+      fileInput.addEventListener('change', function(e) {
+        if (this.files.length) {
+          loadArchiMateFile(this.files[0]);
+        }
+      });
+    }
+    
+    // Load the default ArchiMate XML file
+    fetch('archisurance.xml')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then(content => {
+        xmlContent = content;
+        
+        // Update model info display
+        const modelInfo = document.getElementById('model-info');
+        const modelNameSpan = modelInfo.querySelector('span');
+        modelNameSpan.textContent = currentFileName;
+        modelInfo.classList.remove('hidden');
+        
+        extractViews(content);
+        
+        // Set up event listeners for drag and drop
+        setupDropZoneListeners();
+      })
+      .catch(error => {
+        console.error('Error loading ArchiMate model:', error);
+        document.getElementById('diagram-container').innerHTML = 
+          `<p class="text-red-500">Error loading ArchiMate model: ${error.message}</p>`;
+          
+        // If we're running from file:// protocol, CORS might be blocking the fetch
+        // In this case, we can try to load the file using XMLHttpRequest
+        if (window.location.protocol === 'file:') {
+          console.log('Trying alternative method to load XML file...');
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', 'Archisurance.xml', true);
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+              if (xhr.status === 200 || xhr.status === 0) { // 0 for local files
+                xmlContent = xhr.responseText;
+                
+                // Update model info display
+                const modelInfo = document.getElementById('model-info');
+                const modelNameSpan = modelInfo.querySelector('span');
+                modelNameSpan.textContent = currentFileName;
+                modelInfo.classList.remove('hidden');
+                
+                extractViews(xmlContent);
+                
+                // Set up event listeners for drag and drop
+                setupDropZoneListeners();
+              }
+            }
+          };
+          xhr.send();
+        }
+      });
+    
+    // Add event listeners
+    document.getElementById('apply-settings').addEventListener('click', renderDiagram);
+    document.getElementById('view-select').addEventListener('change', renderDiagram);
+    
+    // Add a subtle animation to the render button
+    const renderButton = document.getElementById('apply-settings');
+    renderButton.addEventListener('mouseenter', function() {
+      this.style.transform = 'scale(1.05)';
+    });
+    renderButton.addEventListener('mouseleave', function() {
+      this.style.transform = 'scale(1)';
+    });
+    
+    // Create and set up the global tooltip
+    function setupGlobalTooltip() {
+      // Create the tooltip element if it doesn't exist
+      let tooltip = document.getElementById('global-tooltip');
+      if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.id = 'global-tooltip';
+        tooltip.innerHTML = `
+          <strong>How to load ArchiMate models:</strong>
+          <ul class="list-disc pl-5 mt-1">
+            <li>Drag and drop an ArchiMate XML file anywhere on this page</li>
+            <li>Click the "Or select a file" button to browse your files</li>
+            <li>Once loaded, select a view from the dropdown menu</li>
+          </ul>
+          <div class="italic text-xs mt-1.5 text-gray-600">Supported file types: .xml</div>
+        `;
+        document.body.appendChild(tooltip);
+      }
+      
+      // Get the help button
+      const helpButton = document.getElementById('help-button');
+      
+      // Show tooltip on mouseover
+      helpButton.addEventListener('mouseenter', function() {
+        const buttonRect = helpButton.getBoundingClientRect();
+        tooltip.style.top = (buttonRect.bottom + 10) + 'px';
+        tooltip.style.left = (buttonRect.right - tooltip.offsetWidth) + 'px';
+        tooltip.classList.add('visible');
+      });
+      
+      // Hide tooltip on mouseout
+      helpButton.addEventListener('mouseleave', function() {
+        tooltip.classList.remove('visible');
+      });
+    }
+    
+    // Call the setup function when the page loads
+    window.addEventListener('DOMContentLoaded', setupGlobalTooltip);
+  </script>
+</body>
+</html>

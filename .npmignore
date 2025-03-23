@@ -1,0 +1,27 @@
+# Source code
+src/
+
+# TypeScript config
+tsconfig*.json
+
+# Development files
+.github/
+.git/
+.gitignore
+examples/
+docs/
+rollup.config.js
+business-actor-demo.html
+sample-view.svg
+archimate-renderer-prompt.md
+README-conversion-script.md
+README-conversion.md
+
+# Tests
+**/*.test.ts
+**/*.spec.ts
+
+# Build artifacts
+node_modules/
+.DS_Store
+*.log

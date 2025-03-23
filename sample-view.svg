@@ -1,0 +1,205 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <rect width="100%" height="100%" fill="#FFFFFF"/>
+  <g transform="translate(56, 60)">
+  <!-- Rectangle container -->
+  <rect
+  width="120"
+  height="55"
+  rx="0"
+  ry="0"
+  fill="rgb(255, 255, 181)"
+  stroke="rgb(92, 92, 92)"
+  stroke-width="1"
+  opacity="1"
+  />
+  <!-- Business Actor icon -->
+  <g transform="translate(110, 4)" stroke="rgb(92, 92, 92)" stroke-width="1" fill="none">
+  <!-- Head -->
+  <circle cx="3" cy="3" r="3" />
+  <!-- Body -->
+  <line x1="3" y1="6" x2="3" y2="12" />
+  <!-- Arms -->
+  <line x1="0" y1="9" x2="6" y2="9" />
+  <!-- Legs -->
+  <line x1="3" y1="12" x2="0" y2="16" />
+  <line x1="3" y1="12" x2="6" y2="16" />
+  </g>
+  <!-- Label -->
+  <text
+  x="60"
+  y="27.5"
+  font-family="Segoe UI"
+  font-size="9"
+  text-anchor="middle"
+  dominant-baseline="middle"
+  fill="#000000"
+  >Business Actor</text>
+  </g>
+  <g transform="translate(371, 164)">
+  <!-- Rectangle container -->
+  <rect
+  width="120"
+  height="55"
+  rx="0"
+  ry="0"
+  fill="rgb(255, 255, 181)"
+  stroke="rgb(92, 92, 92)"
+  stroke-width="1"
+  opacity="1"
+  />
+  <!-- Business Actor icon -->
+  <g transform="translate(110, 4)" stroke="rgb(92, 92, 92)" stroke-width="1" fill="none">
+  <!-- Head -->
+  <circle cx="3" cy="3" r="3" />
+  <!-- Body -->
+  <line x1="3" y1="6" x2="3" y2="12" />
+  <!-- Arms -->
+  <line x1="0" y1="9" x2="6" y2="9" />
+  <!-- Legs -->
+  <line x1="3" y1="12" x2="0" y2="16" />
+  <line x1="3" y1="12" x2="6" y2="16" />
+  </g>
+  <!-- Label -->
+  <text
+  x="60"
+  y="27.5"
+  font-family="Segoe UI"
+  font-size="9"
+  text-anchor="middle"
+  dominant-baseline="middle"
+  fill="#000000"
+  >Business Actor</text>
+  </g>
+  <g transform="translate(106, 225)">
+  <!-- Rectangle container -->
+  <rect
+  width="219"
+  height="124"
+  rx="0"
+  ry="0"
+  fill="rgb(255, 255, 181)"
+  stroke="rgb(92, 92, 92)"
+  stroke-width="1"
+  opacity="1"
+  />
+  <!-- Business Actor icon -->
+  <g transform="translate(209, 4)" stroke="rgb(92, 92, 92)" stroke-width="1" fill="none">
+  <!-- Head -->
+  <circle cx="3" cy="3" r="3" />
+  <!-- Body -->
+  <line x1="3" y1="6" x2="3" y2="12" />
+  <!-- Arms -->
+  <line x1="0" y1="9" x2="6" y2="9" />
+  <!-- Legs -->
+  <line x1="3" y1="12" x2="0" y2="16" />
+  <line x1="3" y1="12" x2="6" y2="16" />
+  </g>
+  <!-- Label -->
+  <text
+  x="109.5"
+  y="62"
+  font-family="Segoe UI"
+  font-size="9"
+  text-anchor="middle"
+  dominant-baseline="middle"
+  fill="#000000"
+  >Business Actor</text>
+  </g>
+  <g transform="translate(166, 261)">
+  <!-- Rectangle container -->
+  <rect
+  width="120"
+  height="55"
+  rx="0"
+  ry="0"
+  fill="rgb(255, 255, 181)"
+  stroke="rgb(92, 92, 92)"
+  stroke-width="1"
+  opacity="1"
+  />
+  <!-- Business Actor icon -->
+  <g transform="translate(110, 4)" stroke="rgb(92, 92, 92)" stroke-width="1" fill="none">
+  <!-- Head -->
+  <circle cx="3" cy="3" r="3" />
+  <!-- Body -->
+  <line x1="3" y1="6" x2="3" y2="12" />
+  <!-- Arms -->
+  <line x1="0" y1="9" x2="6" y2="9" />
+  <!-- Legs -->
+  <line x1="3" y1="12" x2="0" y2="16" />
+  <line x1="3" y1="12" x2="6" y2="16" />
+  </g>
+  <!-- Label -->
+  <text
+  x="60"
+  y="27.5"
+  font-family="Segoe UI"
+  font-size="9"
+  text-anchor="middle"
+  dominant-baseline="middle"
+  fill="#000000"
+  >Business Actor</text>
+  </g>
+  <g transform="translate(420, 240)">
+  <!-- Event shape (rounded rectangle) -->
+  <rect
+  width="120"
+  height="55"
+  rx="8"
+  ry="8"
+  fill="rgb(181, 255, 255)"
+  stroke="rgb(92, 92, 92)"
+  stroke-width="1"
+  opacity="1"
+  />
+  <!-- Icon (wave pattern) -->
+  <g transform="translate(101, 7)" stroke="rgb(92, 92, 92)" stroke-width="1" fill="none">
+  <path d="M 0,0 A 4,4.5 0 0,0 0,9" />
+  <path d="M 12,0 A 4,4.5 0 0,0 12,9" />
+  <line x1="0" y1="0" x2="12" y2="0" />
+  <line x1="0" y1="9" x2="12" y2="9" />
+  </g>
+  <!-- Label -->
+  <text
+  x="60"
+  y="27.5"
+  font-family="Segoe UI"
+  font-size="9"
+  text-anchor="middle"
+  dominant-baseline="middle"
+  fill="#000000"
+  >Application Event</text>
+  </g>
+  <g>
+  <path
+  d="M 185.99938667315817 86.72469033748084 L 432 84 L 431.25581395348837 164"
+  fill="none"
+  stroke="rgb(0, 0, 0)"
+  stroke-width="1"
+  />
+  <g transform="translate(185.99938667315817, 86.72469033748084) rotate(-0.6345792043323768)">
+  <polygon
+  points="0,0 -5,-5 -10,0 -5,5"
+  fill="#000000"
+  stroke="rgb(0, 0, 0)"
+  stroke-width="1"
+  />
+  </g>
+  </g>
+  <g>
+  <path
+  d="M 134.1787013716203 123.94875300138943 L 184.57769423558898 225"
+  fill="none"
+  stroke="rgb(0, 0, 0)"
+  stroke-width="1"
+  />
+  <g transform="translate(134.1787013716203, 123.94875300138943) rotate(63.49241698771578)">
+  <polygon
+  points="0,0 -5,-5 -10,0 -5,5"
+  fill="#FFFFFF"
+  stroke="rgb(0, 0, 0)"
+  stroke-width="1"
+  />
+  </g>
+  </g>
+  </svg>
