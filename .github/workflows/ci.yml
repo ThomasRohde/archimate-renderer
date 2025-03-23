@@ -94,28 +94,18 @@ jobs:
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-      - name: Generate changelog
+      - name: Generate Changelog
         id: changelog
         run: |
-          # Create a temporary file for the changelog
           TEMP_CHANGELOG=$(mktemp)
-          
-          # Check if there are previous tags
-          if git describe --tags --abbrev=0 HEAD^ 2>/dev/null; then
-            # If there are previous tags, get changes since the last tag
-            git log $(git describe --tags --abbrev=0 HEAD^)..HEAD --pretty=format:"- %s" > "$TEMP_CHANGELOG"
+          PREVIOUS_TAG=$(git tag --sort=-creatordate | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 2 | tail -n 1)
+          if [ -n "$PREVIOUS_TAG" ]; then
+            git log "${PREVIOUS_TAG}..HEAD" --pretty=format:"- %s" > "$TEMP_CHANGELOG"
           else
-            # If this is the first tag, get all changes
             git log --pretty=format:"- %s" > "$TEMP_CHANGELOG"
           fi
-          
-          # Read the changelog into a variable and escape newlines
-          CHANGELOG_CONTENT=$(cat "$TEMP_CHANGELOG" | sed 's/$/\\n/' | tr -d '\n')
-          
-          # Set the changelog as an output
-          echo "CHANGELOG=$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
-          
-          # Clean up temporary file
+          CHANGELOG_CONTENT=$(cat "$TEMP_CHANGELOG" | sed ':a;N;$!ba;s/\n/\\n/g' || echo "No changes recorded.")
+          echo "changelog=$CHANGELOG_CONTENT" >> "$GITHUB_OUTPUT"
           rm "$TEMP_CHANGELOG"
 
       - name: Create GitHub Release
