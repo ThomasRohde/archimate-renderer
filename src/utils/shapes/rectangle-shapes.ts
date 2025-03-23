@@ -1,6 +1,6 @@
 /**
  * Rectangle Shapes
- * 
+ *
  * This module provides SVG shape implementations for rectangle-based ArchiMate elements.
  */
 
@@ -35,7 +35,7 @@ export const rectangleShape: ElementShapeGenerator = (
     opacity?: number;
     isCompound?: boolean;
   };
-  
+
   return `
     <g transform="translate(${x}, ${y})">
       <rect
@@ -49,16 +49,16 @@ export const rectangleShape: ElementShapeGenerator = (
         opacity="${opacity}"
       />
       ${generateWrappedText(width / 2, 0, label, {
-    maxWidth: width - 10, // Leave 5px padding on each side
-    maxHeight: height,
-    fontSize,
-    fontFamily,
-    textAnchor: 'middle',
-    dominantBaseline: 'hanging',
-    verticalPosition: isCompound ? 'top' : 'middle',
-    textColor,
-    isCompound,
-  })}
+        maxWidth: width - 10, // Leave 5px padding on each side
+        maxHeight: height,
+        fontSize,
+        fontFamily,
+        textAnchor: 'middle',
+        dominantBaseline: 'hanging',
+        verticalPosition: isCompound ? 'top' : 'middle',
+        textColor,
+        isCompound,
+      })}
     </g>
   `;
 };

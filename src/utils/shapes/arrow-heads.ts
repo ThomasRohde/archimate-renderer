@@ -1,6 +1,6 @@
 /**
  * Arrow Heads
- * 
+ *
  * This module provides SVG implementations for different arrow head styles
  * used in ArchiMate relationship connectors.
  */
@@ -41,14 +41,10 @@ export const standardArrowHead: ArrowHeadGenerator = (
     fillColor = '#000000',
     size = ARROW_HEAD_SIZES.STANDARD,
   } = style as { strokeColor?: string; fillColor?: string; size?: number };
-  
+
   // Calculate arrow points
-  const points = [
-    '0,0',
-    `-${size},-${size / 2}`,
-    `-${size},${size / 2}`,
-  ].join(' ');
-  
+  const points = ['0,0', `-${size},-${size / 2}`, `-${size},${size / 2}`].join(' ');
+
   return `
     <g transform="translate(${x}, ${y}) rotate(${angle})">
       <polygon
@@ -75,14 +71,10 @@ export const outlineArrowHead: ArrowHeadGenerator = (
     fillColor = '#FFFFFF',
     size = ARROW_HEAD_SIZES.OUTLINE,
   } = style as { strokeColor?: string; fillColor?: string; size?: number };
-  
+
   // Calculate arrow points
-  const points = [
-    '0,0',
-    `-${size},-${size / 2}`,
-    `-${size},${size / 2}`,
-  ].join(' ');
-  
+  const points = ['0,0', `-${size},-${size / 2}`, `-${size},${size / 2}`].join(' ');
+
   return `
     <g transform="translate(${x}, ${y}) rotate(${angle})">
       <polygon
@@ -104,11 +96,11 @@ export const openArrowHead: ArrowHeadGenerator = (
   angle: number,
   style: Record<string, unknown> = {},
 ): string => {
-  const {
-    strokeColor = '#000000',
-    size = ARROW_HEAD_SIZES.OPEN,
-  } = style as { strokeColor?: string; size?: number };
-  
+  const { strokeColor = '#000000', size = ARROW_HEAD_SIZES.OPEN } = style as {
+    strokeColor?: string;
+    size?: number;
+  };
+
   return `
     <g transform="translate(${x}, ${y}) rotate(${angle})">
       <path
@@ -135,15 +127,12 @@ export const diamondArrowHead: ArrowHeadGenerator = (
     fillColor = '#FFFFFF',
     size = ARROW_HEAD_SIZES.DIAMOND,
   } = style as { strokeColor?: string; fillColor?: string; size?: number };
-  
+
   // Calculate diamond points - shifted so the tip is at the shape boundary
-  const points = [
-    `${size},0`,
-    `${size / 2},-${size / 3}`,
-    '0,0',
-    `${size / 2},${size / 3}`,
-  ].join(' ');
-  
+  const points = [`${size},0`, `${size / 2},-${size / 3}`, '0,0', `${size / 2},${size / 3}`].join(
+    ' ',
+  );
+
   return `
     <g transform="translate(${x}, ${y}) rotate(${angle})">
       <polygon
@@ -170,15 +159,12 @@ export const filledDiamondArrowHead: ArrowHeadGenerator = (
     fillColor = '#000000',
     size = ARROW_HEAD_SIZES.FILLED_DIAMOND,
   } = style as { strokeColor?: string; fillColor?: string; size?: number };
-  
+
   // Calculate diamond points - shifted so the tip is at the shape boundary
-  const points = [
-    `${size},0`,
-    `${size / 2},-${size / 3}`,
-    '0,0',
-    `${size / 2},${size / 3}`,
-  ].join(' ');
-  
+  const points = [`${size},0`, `${size / 2},-${size / 3}`, '0,0', `${size / 2},${size / 3}`].join(
+    ' ',
+  );
+
   return `
     <g transform="translate(${x}, ${y}) rotate(${angle})">
       <polygon
@@ -205,7 +191,7 @@ export const circleArrowHead: ArrowHeadGenerator = (
     fillColor = '#FFFFFF',
     size = ARROW_HEAD_SIZES.CIRCLE,
   } = style as { strokeColor?: string; fillColor?: string; size?: number };
-  
+
   return `
     <g>
       <circle
@@ -234,7 +220,7 @@ export const filledCircleArrowHead: ArrowHeadGenerator = (
     fillColor = '#000000',
     size = ARROW_HEAD_SIZES.FILLED_CIRCLE,
   } = style as { strokeColor?: string; fillColor?: string; size?: number };
-  
+
   return `
     <g>
       <circle

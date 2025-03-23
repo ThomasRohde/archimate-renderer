@@ -20,7 +20,7 @@ export enum ArchiMateElementType {
   Contract = 'Contract',
   Representation = 'Representation',
   Product = 'Product',
-  
+
   // Application layer
   ApplicationComponent = 'ApplicationComponent',
   ApplicationCollaboration = 'ApplicationCollaboration',
@@ -31,7 +31,7 @@ export enum ArchiMateElementType {
   ApplicationEvent = 'ApplicationEvent',
   ApplicationService = 'ApplicationService',
   DataObject = 'DataObject',
-  
+
   // Technology layer
   Node = 'Node',
   Device = 'Device',
@@ -46,13 +46,13 @@ export enum ArchiMateElementType {
   TechnologyEvent = 'TechnologyEvent',
   TechnologyService = 'TechnologyService',
   Artifact = 'Artifact',
-  
+
   // Physical layer
   Equipment = 'Equipment',
   Facility = 'Facility',
   DistributionNetwork = 'DistributionNetwork',
   Material = 'Material',
-  
+
   // Motivation layer
   Stakeholder = 'Stakeholder',
   Driver = 'Driver',
@@ -64,23 +64,23 @@ export enum ArchiMateElementType {
   Constraint = 'Constraint',
   Meaning = 'Meaning',
   Value = 'Value',
-  
+
   // Strategy layer
   Resource = 'Resource',
   Capability = 'Capability',
   ValueStream = 'ValueStream',
   CourseOfAction = 'CourseOfAction',
-  
+
   // Implementation layer
   WorkPackage = 'WorkPackage',
   Deliverable = 'Deliverable',
   ImplementationEvent = 'ImplementationEvent',
   Plateau = 'Plateau',
   Gap = 'Gap',
-  
+
   // Relationships
   Relationship = 'Relationship',
-  
+
   // Other
   AndJunction = 'AndJunction',
   OrJunction = 'OrJunction',
@@ -181,7 +181,7 @@ export interface IViewElementStyle {
   fontSize?: number;
   fontFamily?: string;
   opacity?: number;
-  isCompound?: boolean;  // Indicates if the element contains other elements
+  isCompound?: boolean; // Indicates if the element contains other elements
 }
 
 /**

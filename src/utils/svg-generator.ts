@@ -127,7 +127,11 @@ export function generateRectangle(
  * @param rect Rectangle defined by {x, y, width, height}
  * @returns Intersection point or null if no intersection
  */
-function calculateIntersection(lineStart: IPoint, lineEnd: IPoint, rect: IRectangle): IPoint | null {
+function calculateIntersection(
+  lineStart: IPoint,
+  lineEnd: IPoint,
+  rect: IRectangle,
+): IPoint | null {
   // Convert rectangle to four line segments
   const topLeft = { x: rect.x, y: rect.y };
   const topRight = { x: rect.x + rect.width, y: rect.y };
@@ -251,7 +255,8 @@ function getArrowHeadSizeForRelationship(
     if ((relationshipType as ArchiMateRelationshipType) === ArchiMateRelationshipType.Aggregation) {
       return ARROW_HEAD_SIZES.DIAMOND;
     }
-  } else { // For target arrow head
+  } else {
+    // For target arrow head
     if ((relationshipType as ArchiMateRelationshipType) === ArchiMateRelationshipType.Access) {
       return ARROW_HEAD_SIZES.STANDARD;
     }
@@ -394,7 +399,7 @@ export function generateConnectionWithRectangles(
       ? getArrowHeadForRelationship(
           relationshipType as ArchiMateRelationshipType,
           relationship.accessType,
-      )
+        )
       : shapeRegistry.getArrowHead(relationshipType);
 
   // Get arrow head placement
@@ -404,7 +409,7 @@ export function generateConnectionWithRectangles(
       ? getArrowHeadPlacement(
           relationshipType as ArchiMateRelationshipType,
           relationship.accessType,
-      )
+        )
       : getArrowHeadPlacement(relationshipType as ArchiMateRelationshipType);
 
   // Variables for source and target arrow heads
@@ -476,7 +481,7 @@ export function generateConnectionWithRectangles(
       ? getSourceArrowHeadForRelationship(
           relationshipType as ArchiMateRelationshipType,
           relationship.accessType,
-      )
+        )
       : getSourceArrowHeadForRelationship(relationshipType as ArchiMateRelationshipType);
 
   // Generate SVG
@@ -486,8 +491,8 @@ export function generateConnectionWithRectangles(
       ${placement.source && sourceArrowHeadGenerator ? sourceArrowHeadGenerator(sourceArrowHeadX, sourceArrowHeadY, sourceAngle + 180, style) : ''}
       ${placement.target && arrowHeadGenerator ? arrowHeadGenerator(targetArrowHeadX, targetArrowHeadY, targetAngle, style) : ''}
       ${
-  label
-    ? `
+        label
+          ? `
         <text
           x="${midX}"
           y="${midY - 5}"
@@ -497,8 +502,8 @@ export function generateConnectionWithRectangles(
           fill="${textColor}"
         >${escapeXml(label)}</text>
       `
-    : ''
-}
+          : ''
+      }
     </g>
   `;
 }

@@ -1,6 +1,6 @@
 /**
  * Compound Element Detector Utility
- * 
+ *
  * This module provides utilities for detecting compound elements (elements that contain other elements)
  * and adjusting their label positioning.
  */
@@ -35,12 +35,12 @@ export function identifyCompoundElements(
   viewElements: IArchiMateViewElement[],
 ): Map<string, boolean> {
   const compoundElements = new Map<string, boolean>();
-  
+
   // Initialize all elements as non-compound
-  viewElements.forEach(element => {
+  viewElements.forEach((element) => {
     compoundElements.set(element.elementRef, false);
   });
-  
+
   // Check each pair of elements to identify parent-child relationships
   for (const potentialParent of viewElements) {
     for (const potentialChild of viewElements) {
@@ -48,7 +48,7 @@ export function identifyCompoundElements(
       if (potentialParent.elementRef === potentialChild.elementRef) {
         continue;
       }
-      
+
       // Check if the potential child is contained within the potential parent
       if (isElementContainedWithin(potentialChild, potentialParent)) {
         // Mark the parent as a compound element
@@ -56,7 +56,7 @@ export function identifyCompoundElements(
       }
     }
   }
-  
+
   return compoundElements;
 }
 
@@ -71,11 +71,11 @@ export function processCompoundElements(
 ): IArchiMateViewElement[] {
   // Identify compound elements
   const compoundElements = identifyCompoundElements(viewElements);
-  
+
   // Update the style of each element based on whether it's a compound element
-  return viewElements.map(element => {
+  return viewElements.map((element) => {
     const isCompound = compoundElements.get(element.elementRef) || false;
-    
+
     // If the element is a compound element, update its style to include the isCompound flag
     if (isCompound) {
       return {
@@ -86,7 +86,7 @@ export function processCompoundElements(
         },
       };
     }
-    
+
     return element;
   });
 }

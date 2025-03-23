@@ -27,8 +27,6 @@
     "build:types": "tsc -p tsconfig.types.json",
     "build:umd": "rollup -c",
     "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types && npm run build:umd",
-    "test": "vitest run",
-    "test:watch": "vitest",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",

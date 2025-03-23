@@ -1,6 +1,6 @@
 /**
  * Line Styles
- * 
+ *
  * This module provides SVG implementations for different line styles
  * used in ArchiMate relationship connectors.
  */
@@ -14,14 +14,11 @@ export const solidLineStyle: LineStyleGenerator = (
   pathData: string,
   style: Record<string, unknown> = {},
 ): string => {
-  const {
-    strokeColor = '#000000',
-    strokeWidth = 1,
-  } = style as {
+  const { strokeColor = '#000000', strokeWidth = 1 } = style as {
     strokeColor?: string;
     strokeWidth?: number;
   };
-  
+
   return `
     <path
       d="${pathData}"
@@ -48,7 +45,7 @@ export const dashedLineStyle: LineStyleGenerator = (
     strokeWidth?: number;
     dashArray?: string;
   };
-  
+
   return `
     <path
       d="${pathData}"
@@ -67,14 +64,11 @@ export const dottedLineStyle: LineStyleGenerator = (
   pathData: string,
   style: Record<string, unknown> = {},
 ): string => {
-  const {
-    strokeColor = '#000000',
-    strokeWidth = 1,
-  } = style as {
+  const { strokeColor = '#000000', strokeWidth = 1 } = style as {
     strokeColor?: string;
     strokeWidth?: number;
   };
-  
+
   return `
     <path
       d="${pathData}"

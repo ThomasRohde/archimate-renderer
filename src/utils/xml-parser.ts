@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /**
  * Cross-platform XML parser utility
- * 
+ *
  * This module provides XML parsing functionality that works in both
  * Node.js and browser environments without relying on environment-specific APIs.
  */
@@ -34,7 +34,7 @@ export function parseXml(xmlString: string): Document {
   try {
     const parser = new DOMParserImpl();
     const doc = parser.parseFromString(xmlString, 'application/xml');
-    
+
     // Check for parsing errors in browser environments
     if (typeof window !== 'undefined' && window.DOMParser) {
       const parserError = doc.querySelector('parsererror');
@@ -45,7 +45,9 @@ export function parseXml(xmlString: string): Document {
 
     return doc;
   } catch (error) {
-    throw new Error(`Failed to parse XML: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(
+      `Failed to parse XML: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }
 
@@ -57,12 +59,12 @@ export function parseXml(xmlString: string): Document {
  */
 export function getElementText(element: Element, selector: string): string {
   let child: Element | null = null;
-  
+
   try {
     // Try browser-style querySelector
     if (typeof element.querySelector === 'function') {
       child = element.querySelector(selector);
-    } 
+    }
     // Fallback for xmldom which doesn't fully implement querySelector
     else {
       const children = element.getElementsByTagName(selector);
@@ -78,7 +80,7 @@ export function getElementText(element: Element, selector: string): string {
       child = children[0];
     }
   }
-  
+
   return child ? child.textContent || '' : '';
 }
 
@@ -109,32 +111,32 @@ export function findElementsByXPath(doc: Document, xpathExpression: string): Ele
       XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
       null,
     );
-    
+
     for (let i = 0; i < xpathResult.snapshotLength; i++) {
       const node = xpathResult.snapshotItem(i) as Element;
       result.push(node);
     }
-    
+
     return result;
-  } 
+  }
   // If XPath is not supported, use a fallback approach
   else {
     // This is a simplified fallback that only handles very basic XPath expressions
     // In a real implementation, you would use a more robust solution
-    
+
     // Example: handle simple element selection like '/model/elements/element'
     const parts = xpathExpression.split('/').filter(Boolean);
     let currentElements: Element[] = [doc.documentElement];
-    
+
     for (const part of parts) {
       const nextElements: Element[] = [];
       for (const element of currentElements) {
         const children = Array.from(element.children);
-        nextElements.push(...children.filter(child => child.tagName === part));
+        nextElements.push(...children.filter((child) => child.tagName === part));
       }
       currentElements = nextElements;
     }
-    
+
     return currentElements;
   }
 }
@@ -150,7 +152,7 @@ export function serializeXml(doc: Document): string {
     if (typeof window !== 'undefined' && window.XMLSerializer) {
       const serializer = new XMLSerializer();
       return serializer.serializeToString(doc);
-    } 
+    }
     // If we're in Node.js, use xmldom's XMLSerializer
     else {
       const xmldom = require('xmldom');

@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /**
  * Text Wrapper Utility
- * 
+ *
  * This module provides utilities for wrapping text in SVG elements
  * to fit within specified dimensions.
  */
@@ -25,9 +25,9 @@ export function escapeXml(text: string): string {
  * Constants for text positioning and padding
  */
 export const TEXT_POSITIONING = {
-  TOP_PADDING: 3,     // Padding from top of container
-  BOTTOM_PADDING: 10,  // Padding from bottom of container  
-  SIDE_PADDING: 5,      // Padding from sides of container
+  TOP_PADDING: 3, // Padding from top of container
+  BOTTOM_PADDING: 10, // Padding from bottom of container
+  SIDE_PADDING: 5, // Padding from sides of container
 };
 
 /**
@@ -45,9 +45,9 @@ export interface ITextWrapOptions {
   textColor?: string;
   ellipsis?: string;
   maxLines?: number;
-  topPadding?: number;    // Custom top padding
+  topPadding?: number; // Custom top padding
   bottomPadding?: number; // Custom bottom padding
-  isCompound?: boolean;   // Indicates if the element is compound (has child elements)
+  isCompound?: boolean; // Indicates if the element is compound (has child elements)
 }
 
 /**
@@ -86,31 +86,31 @@ function estimateCharWidth(fontSize: number): number {
  * @returns Array of wrapped text lines
  */
 function wrapText(text: string, options: ITextWrapOptions): string[] {
-  const { 
-    maxWidth, 
-    fontSize = defaultOptions.fontSize, 
-    maxLines = defaultOptions.maxLines || 0, 
+  const {
+    maxWidth,
+    fontSize = defaultOptions.fontSize,
+    maxLines = defaultOptions.maxLines || 0,
   } = options;
-  
+
   // If text is empty, return empty array
   if (!text || text.trim() === '') {
     return [];
   }
-  
+
   // Estimate characters per line based on font size and max width
   const avgCharWidth = estimateCharWidth(fontSize!);
-  
+
   // Split text into words
   const words = text.split(/\s+/);
   const lines: string[] = [];
   let currentLine = '';
-  
+
   // Process each word
   for (const word of words) {
     // Check if adding this word would exceed the line width
     const testLine = currentLine ? `${currentLine} ${word}` : word;
     const testLineWidth = testLine.length * avgCharWidth;
-    
+
     if (testLineWidth <= maxWidth) {
       // Word fits on current line
       currentLine = testLine;
@@ -119,7 +119,7 @@ function wrapText(text: string, options: ITextWrapOptions): string[] {
       if (currentLine) {
         lines.push(currentLine);
       }
-      
+
       // Check if we've reached the maximum number of lines
       if (maxLines > 0 && lines.length >= maxLines) {
         // Add ellipsis to the last line and truncate
@@ -129,42 +129,43 @@ function wrapText(text: string, options: ITextWrapOptions): string[] {
         lines[lines.length - 1] = truncatedLine;
         break;
       }
-      
+
       // Start new line with current word
       // If the word itself is too long for a line, split it
       if (word.length * avgCharWidth > maxWidth) {
         // Determine how many characters can fit on a line
         const charsPerLine = Math.max(1, Math.floor(maxWidth / avgCharWidth));
         let remainingWord = word;
-        
+
         while (remainingWord.length > 0) {
           const chunk = remainingWord.substring(0, charsPerLine);
           lines.push(chunk);
           remainingWord = remainingWord.substring(charsPerLine);
-          
+
           // Check if we've reached the maximum number of lines
           if (maxLines > 0 && lines.length >= maxLines) {
             // Add ellipsis to the last line and truncate
             const lastLine = lines[lines.length - 1];
             const ellipsis = options.ellipsis || defaultOptions.ellipsis;
-            const truncatedLine = lastLine.substring(0, lastLine.length - ellipsis!.length) + ellipsis;
+            const truncatedLine =
+              lastLine.substring(0, lastLine.length - ellipsis!.length) + ellipsis;
             lines[lines.length - 1] = truncatedLine;
             break;
           }
         }
-        
+
         currentLine = '';
       } else {
         currentLine = word;
       }
     }
   }
-  
+
   // Add the last line if it's not empty
   if (currentLine) {
     lines.push(currentLine);
   }
-  
+
   // If we have a maxLines limit, ensure we don't exceed it
   if (maxLines > 0 && lines.length > maxLines) {
     lines.splice(maxLines);
@@ -173,7 +174,7 @@ function wrapText(text: string, options: ITextWrapOptions): string[] {
     const ellipsis = options.ellipsis || defaultOptions.ellipsis;
     lines[lines.length - 1] = lastLine.substring(0, lastLine.length - ellipsis!.length) + ellipsis;
   }
-  
+
   return lines;
 }
 
@@ -196,7 +197,7 @@ export function generateWrappedText(
     ...defaultOptions,
     ...options,
   };
-  
+
   const {
     fontSize = defaultOptions.fontSize,
     fontFamily = defaultOptions.fontFamily,
@@ -210,25 +211,25 @@ export function generateWrappedText(
     maxHeight = 0,
     isCompound = false,
   } = mergedOptions;
-  
+
   // Wrap the text
   const lines = wrapText(text, mergedOptions);
-  
+
   // If no lines, return empty string
   if (lines.length === 0) {
     return '';
   }
-  
+
   // Calculate line height in pixels
   const lineHeightPx = fontSize! * lineHeight!;
-  
+
   // Calculate total text height
   const totalTextHeight = lines.length * lineHeightPx;
-  
+
   // Calculate appropriate y position based on verticalPosition
   // If the element is compound, force top alignment regardless of verticalPosition setting
   let adjustedY = y;
-  
+
   if (isCompound || verticalPosition === 'top') {
     // Position at top with padding
     // Add small offset to ensure text appears inside the shape
@@ -242,7 +243,7 @@ export function generateWrappedText(
     // Middle position - center text vertically in container
     if (maxHeight) {
       // Remove the half line-height offset that was causing the issue
-      adjustedY = y + (maxHeight / 2) - (totalTextHeight / 2);
+      adjustedY = y + maxHeight / 2 - totalTextHeight / 2;
     } else {
       // If no container height is provided, just use the given y
       adjustedY = y;
@@ -260,7 +261,7 @@ export function generateWrappedText(
       dominant-baseline="${dominantBaseline === 'middle' ? 'middle' : 'hanging'}"
       fill="${textColor}"
     >`;
-  
+
   // Add tspan elements for each line
   lines.forEach((line, index) => {
     // For first line, no additional offset; for subsequent lines, add lineHeight
@@ -268,11 +269,11 @@ export function generateWrappedText(
     svgText += `
       <tspan x="${x}" dy="${dy}">${escapeXml(line)}</tspan>`;
   });
-  
+
   // Close text element
   svgText += `
     </text>`;
-  
+
   return svgText;
 }
 
@@ -291,29 +292,27 @@ export function calculateWrappedTextDimensions(
     ...defaultOptions,
     ...options,
   };
-  
-  const {
-    fontSize = defaultOptions.fontSize,
-    lineHeight = defaultOptions.lineHeight,
-  } = mergedOptions;
-  
+
+  const { fontSize = defaultOptions.fontSize, lineHeight = defaultOptions.lineHeight } =
+    mergedOptions;
+
   // Wrap the text
   const lines = wrapText(text, mergedOptions);
-  
+
   // If no lines, return zero dimensions
   if (lines.length === 0) {
     return { width: 0, height: 0 };
   }
-  
+
   // Calculate line height in pixels
   const lineHeightPx = fontSize! * lineHeight!;
-  
+
   // Calculate total height
   const height = lines.length * lineHeightPx;
-  
+
   // Calculate maximum line width
   const avgCharWidth = estimateCharWidth(fontSize!);
-  const width = Math.max(...lines.map(line => line.length * avgCharWidth));
-  
+  const width = Math.max(...lines.map((line) => line.length * avgCharWidth));
+
   return { width, height };
 }
