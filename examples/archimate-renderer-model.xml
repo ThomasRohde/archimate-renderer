@@ -1,0 +1,1008 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" identifier="model-01">
+  <name>ArchiMate Renderer Architecture</name>
+  <documentation>A detailed architectural model of the ArchiMate Renderer project</documentation>
+
+  <!-- ELEMENTS -->
+  
+  <!-- Application Layer -->
+  <element identifier="app-01" xsi:type="ApplicationComponent">
+    <name>ArchiMate Renderer Core</name>
+    <documentation>Main renderer class for converting ArchiMate XML to SVG</documentation>
+  </element>
+  
+  <element identifier="app-02" xsi:type="ApplicationComponent">
+    <name>CLI Interface</name>
+    <documentation>Command line interface for the renderer</documentation>
+  </element>
+  
+  <element identifier="app-03" xsi:type="ApplicationComponent">
+    <name>SVG Generator</name>
+    <documentation>Utility for generating SVG elements for ArchiMate diagrams</documentation>
+  </element>
+  
+  <element identifier="app-04" xsi:type="ApplicationComponent">
+    <name>Shape Registry</name>
+    <documentation>Registry for element shapes and relationship styles</documentation>
+  </element>
+  
+  <element identifier="app-05" xsi:type="ApplicationComponent">
+    <name>XML Parser</name>
+    <documentation>Cross-platform XML parsing utility</documentation>
+  </element>
+  
+  <element identifier="app-06" xsi:type="ApplicationComponent">
+    <name>Text Wrapper</name>
+    <documentation>Utility for wrapping and escaping text in SVG</documentation>
+  </element>
+  
+  <element identifier="app-07" xsi:type="ApplicationComponent">
+    <name>Compound Element Detector</name>
+    <documentation>Utility for detecting and processing compound elements</documentation>
+  </element>
+  
+  <element identifier="app-08" xsi:type="ApplicationComponent">
+    <name>Icon Renderer</name>
+    <documentation>Utility for rendering ArchiMate element icons</documentation>
+  </element>
+  
+  <element identifier="app-09" xsi:type="ApplicationComponent">
+    <name>Shape Templates</name>
+    <documentation>Templates for common ArchiMate shapes</documentation>
+  </element>
+  
+  <!-- Application Services -->
+  <element identifier="svc-01" xsi:type="ApplicationService">
+    <name>XML Parsing Service</name>
+    <documentation>Service for parsing ArchiMate XML files</documentation>
+  </element>
+  
+  <element identifier="svc-02" xsi:type="ApplicationService">
+    <name>View Rendering Service</name>
+    <documentation>Service for rendering ArchiMate views as SVG</documentation>
+  </element>
+  
+  <element identifier="svc-03" xsi:type="ApplicationService">
+    <name>Element Rendering Service</name>
+    <documentation>Service for rendering ArchiMate elements</documentation>
+  </element>
+  
+  <element identifier="svc-04" xsi:type="ApplicationService">
+    <name>Relationship Rendering Service</name>
+    <documentation>Service for rendering ArchiMate relationships</documentation>
+  </element>
+  
+  <element identifier="svc-05" xsi:type="ApplicationService">
+    <name>CLI Service</name>
+    <documentation>Service for command line operations</documentation>
+  </element>
+  
+  <!-- Application Interfaces -->
+  <element identifier="int-01" xsi:type="ApplicationInterface">
+    <name>Renderer API</name>
+    <documentation>Main API for the renderer</documentation>
+  </element>
+  
+  <element identifier="int-02" xsi:type="ApplicationInterface">
+    <name>CLI Interface</name>
+    <documentation>Command line interface</documentation>
+  </element>
+  
+  <element identifier="int-03" xsi:type="ApplicationInterface">
+    <name>Shape Customization API</name>
+    <documentation>API for customizing element shapes and relationship styles</documentation>
+  </element>
+  
+  <!-- Data Objects -->
+  <element identifier="data-01" xsi:type="DataObject">
+    <name>ArchiMate Element</name>
+    <documentation>Data structure for ArchiMate elements</documentation>
+  </element>
+  
+  <element identifier="data-02" xsi:type="DataObject">
+    <name>ArchiMate Relationship</name>
+    <documentation>Data structure for ArchiMate relationships</documentation>
+  </element>
+  
+  <element identifier="data-03" xsi:type="DataObject">
+    <name>ArchiMate View</name>
+    <documentation>Data structure for ArchiMate views</documentation>
+  </element>
+  
+  <element identifier="data-04" xsi:type="DataObject">
+    <name>Element Type Enum</name>
+    <documentation>Enumeration of ArchiMate element types</documentation>
+  </element>
+  
+  <element identifier="data-05" xsi:type="DataObject">
+    <name>Relationship Type Enum</name>
+    <documentation>Enumeration of ArchiMate relationship types</documentation>
+  </element>
+  
+  <element identifier="data-06" xsi:type="DataObject">
+    <name>SVG Content</name>
+    <documentation>Generated SVG content</documentation>
+  </element>
+  
+  <!-- Technology Layer -->
+  <element identifier="tech-01" xsi:type="SystemSoftware">
+    <name>Node.js Runtime</name>
+    <documentation>JavaScript runtime for server-side execution</documentation>
+  </element>
+  
+  <element identifier="tech-02" xsi:type="SystemSoftware">
+    <name>Web Browser</name>
+    <documentation>Client-side execution environment</documentation>
+  </element>
+  
+  <element identifier="tech-03" xsi:type="SystemSoftware">
+    <name>TypeScript Compiler</name>
+    <documentation>Compiler for TypeScript code</documentation>
+  </element>
+  
+  <!-- Implementation Layer -->
+  <element identifier="impl-01" xsi:type="Artifact">
+    <name>index.ts</name>
+    <documentation>Core renderer implementation</documentation>
+  </element>
+  
+  <element identifier="impl-02" xsi:type="Artifact">
+    <name>cli.ts</name>
+    <documentation>Command line interface implementation</documentation>
+  </element>
+  
+  <element identifier="impl-03" xsi:type="Artifact">
+    <name>types.ts</name>
+    <documentation>Type definitions</documentation>
+  </element>
+  
+  <element identifier="impl-04" xsi:type="Artifact">
+    <name>svg-generator.ts</name>
+    <documentation>SVG generation utility</documentation>
+  </element>
+  
+  <element identifier="impl-05" xsi:type="Artifact">
+    <name>shape-registry.ts</name>
+    <documentation>Shape registry implementation</documentation>
+  </element>
+  
+  <element identifier="impl-06" xsi:type="Artifact">
+    <name>xml-parser.ts</name>
+    <documentation>XML parsing utility</documentation>
+  </element>
+  
+  <element identifier="impl-07" xsi:type="Artifact">
+    <name>text-wrapper.ts</name>
+    <documentation>Text wrapping utility</documentation>
+  </element>
+  
+  <element identifier="impl-08" xsi:type="Artifact">
+    <name>compound-element-detector.ts</name>
+    <documentation>Compound element detection utility</documentation>
+  </element>
+  
+  <element identifier="impl-09" xsi:type="Artifact">
+    <name>icon-renderer.ts</name>
+    <documentation>Icon rendering utility</documentation>
+  </element>
+  
+  <element identifier="impl-10" xsi:type="Artifact">
+    <name>shape-templates.ts</name>
+    <documentation>Shape templates implementation</documentation>
+  </element>
+  
+  <element identifier="impl-11" xsi:type="Artifact">
+    <name>NPM Package</name>
+    <documentation>Published NPM package</documentation>
+  </element>
+  
+  <!-- Business Layer -->
+  <element identifier="biz-01" xsi:type="BusinessFunction">
+    <name>ArchiMate Model Parsing</name>
+    <documentation>Function for parsing ArchiMate models</documentation>
+  </element>
+  
+  <element identifier="biz-02" xsi:type="BusinessFunction">
+    <name>ArchiMate View Rendering</name>
+    <documentation>Function for rendering ArchiMate views</documentation>
+  </element>
+  
+  <element identifier="biz-03" xsi:type="BusinessFunction">
+    <name>Shape Customization</name>
+    <documentation>Function for customizing shapes</documentation>
+  </element>
+  
+  <element identifier="biz-04" xsi:type="BusinessFunction">
+    <name>Batch Processing</name>
+    <documentation>Function for batch processing of ArchiMate models</documentation>
+  </element>
+  
+  <!-- RELATIONSHIPS -->
+  
+  <!-- Component Composition -->
+  <relationship identifier="rel-01" source="app-01" target="app-03" xsi:type="Composition">
+    <documentation>SVG Generator is part of the Core Renderer</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-02" source="app-01" target="app-04" xsi:type="Composition">
+    <documentation>Shape Registry is part of the Core Renderer</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-03" source="app-01" target="app-05" xsi:type="Composition">
+    <documentation>XML Parser is part of the Core Renderer</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-04" source="app-01" target="app-06" xsi:type="Composition">
+    <documentation>Text Wrapper is part of the Core Renderer</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-05" source="app-01" target="app-07" xsi:type="Composition">
+    <documentation>Compound Element Detector is part of the Core Renderer</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-06" source="app-03" target="app-08" xsi:type="Composition">
+    <documentation>Icon Renderer is part of the SVG Generator</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-07" source="app-03" target="app-09" xsi:type="Composition">
+    <documentation>Shape Templates is part of the SVG Generator</documentation>
+  </relationship>
+  
+  <!-- Service Assignments -->
+  <relationship identifier="rel-08" source="app-01" target="svc-01" xsi:type="Assignment">
+    <documentation>Core Renderer provides XML Parsing Service</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-09" source="app-01" target="svc-02" xsi:type="Assignment">
+    <documentation>Core Renderer provides View Rendering Service</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-10" source="app-03" target="svc-03" xsi:type="Assignment">
+    <documentation>SVG Generator provides Element Rendering Service</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-11" source="app-03" target="svc-04" xsi:type="Assignment">
+    <documentation>SVG Generator provides Relationship Rendering Service</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-12" source="app-02" target="svc-05" xsi:type="Assignment">
+    <documentation>CLI Interface provides CLI Service</documentation>
+  </relationship>
+  
+  <!-- Interface Assignments -->
+  <relationship identifier="rel-13" source="app-01" target="int-01" xsi:type="Assignment">
+    <documentation>Core Renderer exposes Renderer API</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-14" source="app-02" target="int-02" xsi:type="Assignment">
+    <documentation>CLI Interface exposes CLI Interface</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-15" source="app-04" target="int-03" xsi:type="Assignment">
+    <documentation>Shape Registry exposes Shape Customization API</documentation>
+  </relationship>
+  
+  <!-- Service Access to Data -->
+  <relationship identifier="rel-16" source="svc-01" target="data-01" xsi:type="Access" accessType="ReadWrite">
+    <documentation>XML Parsing Service accesses ArchiMate Element data</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-17" source="svc-01" target="data-02" xsi:type="Access" accessType="ReadWrite">
+    <documentation>XML Parsing Service accesses ArchiMate Relationship data</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-18" source="svc-01" target="data-03" xsi:type="Access" accessType="ReadWrite">
+    <documentation>XML Parsing Service accesses ArchiMate View data</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-19" source="svc-02" target="data-06" xsi:type="Access" accessType="Write">
+    <documentation>View Rendering Service produces SVG Content</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-20" source="svc-03" target="data-06" xsi:type="Access" accessType="Write">
+    <documentation>Element Rendering Service produces SVG Content</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-21" source="svc-04" target="data-06" xsi:type="Access" accessType="Write">
+    <documentation>Relationship Rendering Service produces SVG Content</documentation>
+  </relationship>
+  
+  <!-- Component Dependencies -->
+  <relationship identifier="rel-22" source="app-02" target="app-01" xsi:type="Serving">
+    <documentation>CLI Interface uses Core Renderer</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-23" source="app-03" target="app-04" xsi:type="Serving">
+    <documentation>SVG Generator uses Shape Registry</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-24" source="app-01" target="app-05" xsi:type="Serving">
+    <documentation>Core Renderer uses XML Parser</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-25" source="app-03" target="app-06" xsi:type="Serving">
+    <documentation>SVG Generator uses Text Wrapper</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-26" source="app-01" target="app-07" xsi:type="Serving">
+    <documentation>Core Renderer uses Compound Element Detector</documentation>
+  </relationship>
+  
+  <!-- Implementation Relationships -->
+  <relationship identifier="rel-27" source="impl-01" target="app-01" xsi:type="Realization">
+    <documentation>index.ts realizes Core Renderer</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-28" source="impl-02" target="app-02" xsi:type="Realization">
+    <documentation>cli.ts realizes CLI Interface</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-29" source="impl-03" target="data-01" xsi:type="Realization">
+    <documentation>types.ts realizes ArchiMate Element data structure</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-30" source="impl-03" target="data-02" xsi:type="Realization">
+    <documentation>types.ts realizes ArchiMate Relationship data structure</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-31" source="impl-03" target="data-03" xsi:type="Realization">
+    <documentation>types.ts realizes ArchiMate View data structure</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-32" source="impl-03" target="data-04" xsi:type="Realization">
+    <documentation>types.ts realizes Element Type Enum</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-33" source="impl-03" target="data-05" xsi:type="Realization">
+    <documentation>types.ts realizes Relationship Type Enum</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-34" source="impl-04" target="app-03" xsi:type="Realization">
+    <documentation>svg-generator.ts realizes SVG Generator</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-35" source="impl-05" target="app-04" xsi:type="Realization">
+    <documentation>shape-registry.ts realizes Shape Registry</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-36" source="impl-06" target="app-05" xsi:type="Realization">
+    <documentation>xml-parser.ts realizes XML Parser</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-37" source="impl-07" target="app-06" xsi:type="Realization">
+    <documentation>text-wrapper.ts realizes Text Wrapper</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-38" source="impl-08" target="app-07" xsi:type="Realization">
+    <documentation>compound-element-detector.ts realizes Compound Element Detector</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-39" source="impl-09" target="app-08" xsi:type="Realization">
+    <documentation>icon-renderer.ts realizes Icon Renderer</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-40" source="impl-10" target="app-09" xsi:type="Realization">
+    <documentation>shape-templates.ts realizes Shape Templates</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-41" source="impl-11" target="app-01" xsi:type="Aggregation">
+    <documentation>NPM Package aggregates Core Renderer</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-42" source="impl-11" target="app-02" xsi:type="Aggregation">
+    <documentation>NPM Package aggregates CLI Interface</documentation>
+  </relationship>
+  
+  <!-- Technology Usage -->
+  <relationship identifier="rel-43" source="app-01" target="tech-01" xsi:type="Serving">
+    <documentation>Core Renderer serves Node.js Runtime</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-44" source="app-01" target="tech-02" xsi:type="Serving">
+    <documentation>Core Renderer serves Web Browser</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-45" source="impl-01" target="tech-03" xsi:type="Serving">
+    <documentation>TypeScript source files use TypeScript Compiler</documentation>
+  </relationship>
+  
+  <!-- Business Function Realization -->
+  <relationship identifier="rel-46" source="app-01" target="biz-01" xsi:type="Realization">
+    <documentation>Core Renderer realizes ArchiMate Model Parsing function</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-47" source="app-01" target="biz-02" xsi:type="Realization">
+    <documentation>Core Renderer realizes ArchiMate View Rendering function</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-48" source="app-04" target="biz-03" xsi:type="Realization">
+    <documentation>Shape Registry realizes Shape Customization function</documentation>
+  </relationship>
+  
+  <relationship identifier="rel-49" source="app-02" target="biz-04" xsi:type="Realization">
+    <documentation>CLI Interface realizes Batch Processing function</documentation>
+  </relationship>
+  
+  <!-- VIEWS -->
+  
+  <!-- Application Component View -->
+  <view identifier="view-01">
+    <name>Application Component Structure</name>
+    <documentation>Shows the structure of application components</documentation>
+    
+    <!-- Elements -->
+    <node elementRef="app-01" x="400" y="100" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-02" x="200" y="250" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-03" x="400" y="250" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-04" x="600" y="250" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-05" x="200" y="400" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-06" x="400" y="400" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-07" x="600" y="400" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-08" x="300" y="550" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-09" x="500" y="550" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <!-- Relationships -->
+    <connection relationshipRef="rel-01">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-02">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-03">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-04">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-05">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-06">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-07">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-22">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-23">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-24">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-25">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-26">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+  </view>
+  
+  <!-- Service View -->
+  <view identifier="view-02">
+    <name>Application Services</name>
+    <documentation>Shows the services provided by application components</documentation>
+    
+    <!-- Elements -->
+    <node elementRef="app-01" x="400" y="100" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-02" x="100" y="100" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-03" x="700" y="100" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="svc-01" x="250" y="250" width="120" height="60">
+      <style>
+        <fillColor r="171" g="235" b="198"/>
+      </style>
+    </node>
+    
+    <node elementRef="svc-02" x="400" y="250" width="120" height="60">
+      <style>
+        <fillColor r="171" g="235" b="198"/>
+      </style>
+    </node>
+    
+    <node elementRef="svc-03" x="550" y="250" width="120" height="60">
+      <style>
+        <fillColor r="171" g="235" b="198"/>
+      </style>
+    </node>
+    
+    <node elementRef="svc-04" x="700" y="250" width="120" height="60">
+      <style>
+        <fillColor r="171" g="235" b="198"/>
+      </style>
+    </node>
+    
+    <node elementRef="svc-05" x="100" y="250" width="120" height="60">
+      <style>
+        <fillColor r="171" g="235" b="198"/>
+      </style>
+    </node>
+    
+    <node elementRef="int-01" x="400" y="400" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="int-02" x="100" y="400" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="int-03" x="700" y="400" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <!-- Relationships -->
+    <connection relationshipRef="rel-08">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-09">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-10">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-11">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-12">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-13">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-14">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-15">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+      <bendpoint x="700" y="350"/>
+    </connection>
+  </view>
+  
+  <!-- Data Flow View -->
+  <view identifier="view-03">
+    <name>Data Flow</name>
+    <documentation>Shows the flow of data between services and data objects</documentation>
+    
+    <!-- Elements -->
+    <node elementRef="svc-01" x="400" y="100" width="120" height="60">
+      <style>
+        <fillColor r="171" g="235" b="198"/>
+      </style>
+    </node>
+    
+    <node elementRef="svc-02" x="400" y="400" width="120" height="60">
+      <style>
+        <fillColor r="171" g="235" b="198"/>
+      </style>
+    </node>
+    
+    <node elementRef="svc-03" x="200" y="400" width="120" height="60">
+      <style>
+        <fillColor r="171" g="235" b="198"/>
+      </style>
+    </node>
+    
+    <node elementRef="svc-04" x="600" y="400" width="120" height="60">
+      <style>
+        <fillColor r="171" g="235" b="198"/>
+      </style>
+    </node>
+    
+    <node elementRef="data-01" x="200" y="250" width="120" height="60">
+      <style>
+        <fillColor r="249" g="231" b="159"/>
+      </style>
+    </node>
+    
+    <node elementRef="data-02" x="400" y="250" width="120" height="60">
+      <style>
+        <fillColor r="249" g="231" b="159"/>
+      </style>
+    </node>
+    
+    <node elementRef="data-03" x="600" y="250" width="120" height="60">
+      <style>
+        <fillColor r="249" g="231" b="159"/>
+      </style>
+    </node>
+    
+    <node elementRef="data-06" x="400" y="550" width="120" height="60">
+      <style>
+        <fillColor r="249" g="231" b="159"/>
+      </style>
+    </node>
+    
+    <!-- Relationships -->
+    <connection relationshipRef="rel-16">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-16">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-17">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-18">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-19">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-20">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-21">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+  </view>
+  
+  <!-- Implementation View -->
+  <view identifier="view-04">
+    <name>Implementation Structure</name>
+    <documentation>Shows the implementation artifacts and their relationships to application components</documentation>
+    
+    <!-- Elements -->
+    <node elementRef="impl-01" x="400" y="100" width="120" height="60">
+      <style>
+        <fillColor r="245" g="203" b="167"/>
+      </style>
+    </node>
+    
+    <node elementRef="impl-02" x="200" y="100" width="120" height="60">
+      <style>
+        <fillColor r="245" g="203" b="167"/>
+      </style>
+    </node>
+    
+    <node elementRef="impl-03" x="600" y="100" width="120" height="60">
+      <style>
+        <fillColor r="245" g="203" b="167"/>
+      </style>
+    </node>
+    
+    <node elementRef="impl-04" x="200" y="200" width="120" height="60">
+      <style>
+        <fillColor r="245" g="203" b="167"/>
+      </style>
+    </node>
+    
+    <node elementRef="impl-05" x="400" y="200" width="120" height="60">
+      <style>
+        <fillColor r="245" g="203" b="167"/>
+      </style>
+    </node>
+    
+    <node elementRef="impl-06" x="600" y="200" width="120" height="60">
+      <style>
+        <fillColor r="245" g="203" b="167"/>
+      </style>
+    </node>
+    
+    <node elementRef="impl-07" x="200" y="300" width="120" height="60">
+      <style>
+        <fillColor r="245" g="203" b="167"/>
+      </style>
+    </node>
+    
+    <node elementRef="impl-08" x="400" y="300" width="120" height="60">
+      <style>
+        <fillColor r="245" g="203" b="167"/>
+      </style>
+    </node>
+    
+    <node elementRef="impl-09" x="600" y="300" width="120" height="60">
+      <style>
+        <fillColor r="245" g="203" b="167"/>
+      </style>
+    </node>
+    
+    <node elementRef="impl-10" x="400" y="400" width="120" height="60">
+      <style>
+        <fillColor r="245" g="203" b="167"/>
+      </style>
+    </node>
+    
+    <node elementRef="impl-11" x="400" y="500" width="120" height="60">
+      <style>
+        <fillColor r="245" g="203" b="167"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-01" x="200" y="600" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-02" x="600" y="600" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <!-- Relationships -->
+    <connection relationshipRef="rel-27">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-28">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-34">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-35">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-36">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-37">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-38">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-39">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-40">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-41">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-42">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+  </view>
+  
+  <!-- Business Function View -->
+  <view identifier="view-05">
+    <name>Business Functions</name>
+    <documentation>Shows the business functions and their realization by application components</documentation>
+    
+    <!-- Elements -->
+    <node elementRef="biz-01" x="200" y="100" width="120" height="60">
+      <style>
+        <fillColor r="249" g="231" b="159"/>
+      </style>
+    </node>
+    
+    <node elementRef="biz-02" x="400" y="100" width="120" height="60">
+      <style>
+        <fillColor r="249" g="231" b="159"/>
+      </style>
+    </node>
+    
+    <node elementRef="biz-03" x="600" y="100" width="120" height="60">
+      <style>
+        <fillColor r="249" g="231" b="159"/>
+      </style>
+    </node>
+    
+    <node elementRef="biz-04" x="800" y="100" width="120" height="60">
+      <style>
+        <fillColor r="249" g="231" b="159"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-01" x="300" y="250" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-02" x="800" y="250" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <node elementRef="app-04" x="600" y="250" width="120" height="60">
+      <style>
+        <fillColor r="133" g="193" b="233"/>
+      </style>
+    </node>
+    
+    <!-- Relationships -->
+    <connection relationshipRef="rel-46">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-47">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-48">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+    
+    <connection relationshipRef="rel-49">
+      <style>
+        <lineColor r="0" g="0" b="0"/>
+      </style>
+    </connection>
+  </view>
+</model>

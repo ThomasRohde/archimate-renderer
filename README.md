@@ -233,29 +233,42 @@ npm test
 
 This project follows [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH) and uses GitHub Actions for automated releases.
 
+### Version Management
+
+The project uses a centralized approach to version management:
+
+1. **Single Source of Truth**: The version in `package.json` is the authoritative version number
+2. **Build-time Synchronization**: During the build process, a prebuild script (`scripts/update-version.js`) generates `src/version.ts` with the current version from package.json
+3. **CLI Version Display**: The CLI uses this generated version constant, ensuring consistency across all components
+
+This approach ensures that all parts of the application display the same version number and avoids hardcoded version strings.
+
 ### Creating a Release
 
 To create a new release:
 
-1. Ensure all changes for the release are merged to the main branch
-2. Create and push a tag for a minor release (x.y.0):
+1. Update the version in `package.json` using semantic versioning
+2. Commit and push this change: `git commit -am "Bump version to x.y.z"`
+3. Create and push a tag matching the version number:
 
 ```bash
-# Example for creating a v1.2.0 release
+# Example for creating a v1.5.0 release
 git checkout main
 git pull
-git tag v1.2.0
-git push origin v1.2.0
+git tag v1.5.0
+git push origin v1.5.0
 ```
+
+4. The tag name should match the version in package.json, prefixed with 'v' (e.g., v1.5.0)
 
 ### Automated Release Process
 
-When a minor release tag (e.g., v1.2.0) is pushed, the GitHub Actions workflow automatically:
+When a tag is pushed, the GitHub Actions workflow automatically:
 
-1. Builds the project
+1. Builds the project (which synchronizes the version.ts file with package.json)
 2. Publishes the package to npm
 3. Creates a GitHub Release with auto-generated release notes
-4. Updates the version in package.json to the next patch version (e.g., v1.2.1)
+4. Updates the version in package.json to the next patch version (e.g., v1.5.0 → v1.5.1)
 5. Creates a new tag for the next patch version
 
 This automation helps maintain a consistent release process and prepares the repository for the next development cycle.

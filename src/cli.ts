@@ -12,6 +12,7 @@ import * as path from 'path';
 import chalk from 'chalk';
 import { ArchiMateRenderer, IArchiMateRendererOptions } from './index';
 import { IArchiMateElement, IArchiMateRelationship } from './types';
+import { VERSION } from './version';
 interface IArchiMateView {
   id: string;
   name?: string;
@@ -61,7 +62,7 @@ const program = new Command();
 program
   .name('archimate-renderer')
   .description('Command line tool for rendering ArchiMate models as SVG')
-  .version('1.0.0');
+  .version(VERSION);
 
 /**
  * Read XML file from the filesystem.
