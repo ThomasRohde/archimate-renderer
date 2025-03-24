@@ -309,6 +309,198 @@ function calculateArrowHeadOffset(
 }
 
 /**
+ * Determine which edge of a rectangle a point is closest to
+ * @param point The point to check
+ * @param rect The rectangle
+ * @returns The closest edge as 'top', 'right', 'bottom', or 'left'
+ */
+function getClosestEdge(point: IPoint, rect: IRectangle): 'top' | 'right' | 'bottom' | 'left' {
+  const distToTop = Math.abs(point.y - rect.y);
+  const distToRight = Math.abs(point.x - (rect.x + rect.width));
+  const distToBottom = Math.abs(point.y - (rect.y + rect.height));
+  const distToLeft = Math.abs(point.x - rect.x);
+
+  const minDist = Math.min(distToTop, distToRight, distToBottom, distToLeft);
+
+  if (minDist === distToTop) return 'top';
+  if (minDist === distToRight) return 'right';
+  if (minDist === distToBottom) return 'bottom';
+  if (minDist === distToLeft) return 'left';
+
+  return 'top'; // Default fallback
+}
+
+/**
+ * Determine if two rectangles are close enough to use a direct connection
+ * @param rect1 First rectangle
+ * @param rect2 Second rectangle
+ * @returns True if a direct connection is better than a 90-degree connection
+ */
+function isDirectConnectionBetter(rect1: IRectangle, rect2: IRectangle): boolean {
+  // Check if rectangles overlap in either dimension
+  const overlapX = (rect1.x <= rect2.x + rect2.width && rect1.x + rect1.width >= rect2.x);
+  const overlapY = (rect1.y <= rect2.y + rect2.height && rect1.y + rect1.height >= rect2.y);
+  
+  // If they overlap in one dimension but not both, use direct connection
+  if ((overlapX && !overlapY) || (!overlapX && overlapY)) {
+    return true;
+  }
+  
+  // If they're very close, use direct connection
+  const center1 = {
+    x: rect1.x + rect1.width / 2,
+    y: rect1.y + rect1.height / 2,
+  };
+  const center2 = {
+    x: rect2.x + rect2.width / 2,
+    y: rect2.y + rect2.height / 2,
+  };
+  
+  const distance = Math.sqrt(
+    Math.pow(center2.x - center1.x, 2) + Math.pow(center2.y - center1.y, 2),
+  );
+  
+  // If centers are close, use direct connection
+  return distance < Math.max(rect1.width, rect1.height, rect2.width, rect2.height);
+}
+
+/**
+ * Calculate the exit point from a source rectangle towards a target rectangle
+ * @param sourceRect Source rectangle
+ * @param targetRect Target rectangle
+ * @returns The exit point on the source rectangle's edge
+ */
+function calculateExitPoint(sourceRect: IRectangle, targetRect: IRectangle): IPoint {
+  const sourceCenter = {
+    x: sourceRect.x + sourceRect.width / 2,
+    y: sourceRect.y + sourceRect.height / 2,
+  };
+  
+  const targetCenter = {
+    x: targetRect.x + targetRect.width / 2,
+    y: targetRect.y + targetRect.height / 2,
+  };
+  
+  // Calculate intersection with source rectangle
+  const intersection = calculateIntersection(sourceCenter, targetCenter, sourceRect);
+  
+  if (intersection) {
+    return intersection;
+  }
+  
+  // If no intersection found, snap to the nearest edge
+  return snapToRectangleEdge(sourceCenter, sourceRect, targetCenter);
+}
+
+/**
+ * Calculate the entry point to a target rectangle from a source rectangle
+ * @param targetRect Target rectangle
+ * @param sourceRect Source rectangle
+ * @returns The entry point on the target rectangle's edge
+ */
+function calculateEntryPoint(targetRect: IRectangle, sourceRect: IRectangle): IPoint {
+  const targetCenter = {
+    x: targetRect.x + targetRect.width / 2,
+    y: targetRect.y + targetRect.height / 2,
+  };
+  
+  const sourceCenter = {
+    x: sourceRect.x + sourceRect.width / 2,
+    y: sourceRect.y + sourceRect.height / 2,
+  };
+  
+  // Calculate intersection with target rectangle
+  const intersection = calculateIntersection(sourceCenter, targetCenter, targetRect);
+  
+  if (intersection) {
+    return intersection;
+  }
+  
+  // If no intersection found, snap to the nearest edge
+  return snapToRectangleEdge(targetCenter, targetRect, sourceCenter);
+}
+
+/**
+ * Remove duplicate adjacent points from a path
+ * @param points Array of points
+ * @returns Array with duplicate adjacent points removed
+ */
+function removeDuplicateAdjacentPoints(points: IPoint[]): IPoint[] {
+  if (points.length <= 1) {
+    return points;
+  }
+  
+  const result: IPoint[] = [points[0]];
+  
+  for (let i = 1; i < points.length; i++) {
+    const prev = result[result.length - 1];
+    const current = points[i];
+    
+    // If the current point is different from the previous one, add it
+    if (prev.x !== current.x || prev.y !== current.y) {
+      result.push(current);
+    }
+  }
+  
+  return result;
+}
+
+/**
+ * Snap a point to the edge of a rectangle
+ * @param point The point to snap
+ * @param rect The rectangle
+ * @param referencePoint A reference point to determine which edge to snap to (unused but kept for API consistency)
+ * @returns The snapped point
+ */
+function snapToRectangleEdge(point: IPoint, rect: IRectangle, _referencePoint: IPoint): IPoint {
+  // Determine the closest edge
+  const edge = getClosestEdge(point, rect);
+  
+  // Snap to the appropriate edge
+  switch (edge) {
+  case 'top':
+    return { x: Math.max(rect.x, Math.min(rect.x + rect.width, point.x)), y: rect.y };
+  case 'right':
+    return { x: rect.x + rect.width, y: Math.max(rect.y, Math.min(rect.y + rect.height, point.y)) };
+  case 'bottom':
+    return { x: Math.max(rect.x, Math.min(rect.x + rect.width, point.x)), y: rect.y + rect.height };
+  case 'left':
+    return { x: rect.x, y: Math.max(rect.y, Math.min(rect.y + rect.height, point.y)) };
+  default:
+    return point;
+  }
+}
+
+/**
+ * Create a 90-degree bend between two points
+ * @param start Start point
+ * @param end End point
+ * @returns Array of points creating a 90-degree path
+ */
+function create90DegreeBend(start: IPoint, end: IPoint): IPoint[] {
+  // Determine which dimension has the larger difference
+  const dx = Math.abs(end.x - start.x);
+  const dy = Math.abs(end.y - start.y);
+  
+  // Create a bend point at the appropriate position
+  if (dx >= dy) {
+    // Horizontal first, then vertical
+    return [
+      { x: start.x, y: start.y },
+      { x: end.x, y: start.y },
+      { x: end.x, y: end.y },
+    ];
+  } else {
+    // Vertical first, then horizontal
+    return [
+      { x: start.x, y: start.y },
+      { x: start.x, y: end.y },
+      { x: end.x, y: end.y },
+    ];
+  }
+}
+
+/**
  * Generate SVG for a connection/relationship with rectangle elements
  * @param sourceElement Source element rectangle {x, y, width, height}
  * @param targetElement Target element rectangle {x, y, width, height}
@@ -346,29 +538,42 @@ export function generateConnectionWithRectangles(
 
   // Handle bendpoints
   if (bendpoints.length > 0) {
+    // Determine reference points for source and target
+    const sourceReferencePoint = bendpoints[0];
+    const targetReferencePoint = bendpoints[bendpoints.length - 1];
+
     // Calculate intersection with source element (from source center to first bendpoint)
-    const firstBendpoint = bendpoints[0];
-    const sourceIntersection = calculateIntersection(sourceCenter, firstBendpoint, sourceElement);
+    const sourceIntersection = calculateIntersection(sourceCenter, sourceReferencePoint, sourceElement);
+    
+    // If no intersection found, snap to the nearest edge
+    const sourcePoint = sourceIntersection || 
+      snapToRectangleEdge(sourceCenter, sourceElement, sourceReferencePoint);
 
     // Calculate intersection with target element (from last bendpoint to target center)
-    const lastBendpoint = bendpoints[bendpoints.length - 1];
-    const targetIntersection = calculateIntersection(lastBendpoint, targetCenter, targetElement);
+    const targetIntersection = calculateIntersection(targetReferencePoint, targetCenter, targetElement);
+    
+    // If no intersection found, snap to the nearest edge
+    const targetPoint = targetIntersection || 
+      snapToRectangleEdge(targetCenter, targetElement, targetReferencePoint);
 
     // Build path points
-    pathPoints.push(sourceIntersection || sourceCenter);
+    pathPoints.push(sourcePoint);
     pathPoints = pathPoints.concat(bendpoints);
-    pathPoints.push(targetIntersection || targetCenter);
+    pathPoints.push(targetPoint);
   } else {
-    // No bendpoints, direct line from source to target
-    // Calculate intersections with source and target elements
+    // No bendpoints, use direct connection
+    
+    // Calculate direct intersections with source and target elements
     const sourceIntersection = calculateIntersection(sourceCenter, targetCenter, sourceElement);
-
     const targetIntersection = calculateIntersection(sourceCenter, targetCenter, targetElement);
-
-    // Build path points
+    
+    // Build direct path points
     pathPoints.push(sourceIntersection || sourceCenter);
     pathPoints.push(targetIntersection || targetCenter);
   }
+
+  // Remove any duplicate adjacent points
+  pathPoints = removeDuplicateAdjacentPoints(pathPoints);
 
   // Generate path data
   let pathData = `M ${pathPoints[0].x} ${pathPoints[0].y}`;

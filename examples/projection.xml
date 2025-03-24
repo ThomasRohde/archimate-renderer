@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.opengroup.org/xsd/archimate/3.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengroup.org/xsd/archimate/3.0/ http://www.opengroup.org/xsd/archimate/3.1/archimate3_Diagram.xsd" identifier="id-b9f331e307b3468baef3f62bc0ce68cc">
+  <name xml:lang="en">BendingPoints</name>
+  <elements>
+    <element identifier="id-3c853d93515743ec90d5f09058bf924a" xsi:type="Resource">
+      <name xml:lang="en">Resource</name>
+    </element>
+    <element identifier="id-919ad995161b4bd8a1070bf260c8fd80" xsi:type="Resource">
+      <name xml:lang="en">Resource</name>
+    </element>
+    <element identifier="id-7c674b8576d4483b8ac6d4db82906319" xsi:type="Capability">
+      <name xml:lang="en">Capability</name>
+    </element>
+    <element identifier="id-604e60bb464f4577a31fbb58c849ab7c" xsi:type="Grouping">
+      <name xml:lang="en">Grouping</name>
+    </element>
+  </elements>
+  <relationships>
+    <relationship identifier="id-58f0321eeb834767a8abae6eb2a75b4f" source="id-7c674b8576d4483b8ac6d4db82906319" target="id-3c853d93515743ec90d5f09058bf924a" xsi:type="Association" />
+    <relationship identifier="id-884a9eeb417c4a7ead5f36a04669b5b1" source="id-7c674b8576d4483b8ac6d4db82906319" target="id-919ad995161b4bd8a1070bf260c8fd80" xsi:type="Association" />
+  </relationships>
+  <views>
+    <diagrams>
+      <view identifier="id-32ba1a1f951141d891adb06f9c9d4301" xsi:type="Diagram">
+        <name xml:lang="en">Default View</name>
+        <node identifier="id-5db39443b1f049af91307147c17b38d3" elementRef="id-3c853d93515743ec90d5f09058bf924a" xsi:type="Element" x="15" y="15" w="120" h="55">
+          <style>
+            <fillColor r="245" g="222" b="170" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-7e24eed08f4c4a48b9da18190dfa8e50" elementRef="id-919ad995161b4bd8a1070bf260c8fd80" xsi:type="Element" x="192" y="15" w="120" h="55">
+          <style>
+            <fillColor r="245" g="222" b="170" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-2e2a7f32873644daa0a4b5fc54b72344" elementRef="id-7c674b8576d4483b8ac6d4db82906319" xsi:type="Element" x="108" y="132" w="120" h="55">
+          <style>
+            <fillColor r="245" g="222" b="170" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <connection identifier="id-518f03da762244058c4b8238e9d75e5d" relationshipRef="id-58f0321eeb834767a8abae6eb2a75b4f" xsi:type="Relationship" source="id-2e2a7f32873644daa0a4b5fc54b72344" target="id-5db39443b1f049af91307147c17b38d3">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-a635eca0fcb64fda83d7a7e2569bb150" relationshipRef="id-884a9eeb417c4a7ead5f36a04669b5b1" xsi:type="Relationship" source="id-2e2a7f32873644daa0a4b5fc54b72344" target="id-7e24eed08f4c4a48b9da18190dfa8e50">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+      </view>
+    </diagrams>
+  </views>
+</model>
