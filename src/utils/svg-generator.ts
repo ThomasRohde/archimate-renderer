@@ -399,7 +399,7 @@ export function generateConnectionWithRectangles(
       ? getArrowHeadForRelationship(
           relationshipType as ArchiMateRelationshipType,
           relationship.accessType,
-        )
+      )
       : shapeRegistry.getArrowHead(relationshipType);
 
   // Get arrow head placement
@@ -409,7 +409,7 @@ export function generateConnectionWithRectangles(
       ? getArrowHeadPlacement(
           relationshipType as ArchiMateRelationshipType,
           relationship.accessType,
-        )
+      )
       : getArrowHeadPlacement(relationshipType as ArchiMateRelationshipType);
 
   // Variables for source and target arrow heads
@@ -481,7 +481,7 @@ export function generateConnectionWithRectangles(
       ? getSourceArrowHeadForRelationship(
           relationshipType as ArchiMateRelationshipType,
           relationship.accessType,
-        )
+      )
       : getSourceArrowHeadForRelationship(relationshipType as ArchiMateRelationshipType);
 
   // Generate SVG
@@ -491,8 +491,8 @@ export function generateConnectionWithRectangles(
       ${placement.source && sourceArrowHeadGenerator ? sourceArrowHeadGenerator(sourceArrowHeadX, sourceArrowHeadY, sourceAngle + 180, style) : ''}
       ${placement.target && arrowHeadGenerator ? arrowHeadGenerator(targetArrowHeadX, targetArrowHeadY, targetAngle, style) : ''}
       ${
-        label
-          ? `
+  label
+    ? `
         <text
           x="${midX}"
           y="${midY - 5}"
@@ -502,8 +502,8 @@ export function generateConnectionWithRectangles(
           fill="${textColor}"
         >${escapeXml(label)}</text>
       `
-          : ''
-      }
+    : ''
+}
     </g>
   `;
 }

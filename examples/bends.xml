@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.opengroup.org/xsd/archimate/3.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengroup.org/xsd/archimate/3.0/ http://www.opengroup.org/xsd/archimate/3.1/archimate3_Diagram.xsd" identifier="id-b9f331e307b3468baef3f62bc0ce68cc">
+  <name xml:lang="en">BendinPoints</name>
+  <elements>
+    <element identifier="id-8a6521d2183b4b1d8ffdf7337996fb2b" xsi:type="Grouping">
+      <name xml:lang="en">Source</name>
+    </element>
+    <element identifier="id-45d13ba93cd54b57802c2520c7516112" xsi:type="Grouping">
+      <name xml:lang="en">Target</name>
+    </element>
+  </elements>
+  <relationships>
+    <relationship identifier="id-bc4256f21e5348429d434dde3cb49f88" source="id-8a6521d2183b4b1d8ffdf7337996fb2b" target="id-45d13ba93cd54b57802c2520c7516112" xsi:type="Association" />
+  </relationships>
+  <views>
+    <diagrams>
+      <view identifier="id-32ba1a1f951141d891adb06f9c9d4301" xsi:type="Diagram">
+        <name xml:lang="en">Default View</name>
+        <node identifier="id-3911f7bf25404d648ccfee29b1e1e30c" elementRef="id-8a6521d2183b4b1d8ffdf7337996fb2b" xsi:type="Element" x="72" y="84" w="145" h="133">
+          <style>
+            <fillColor r="255" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-57369d356c9c4349be6e5d40a2149491" elementRef="id-45d13ba93cd54b57802c2520c7516112" xsi:type="Element" x="312" y="216" w="145" h="133">
+          <style>
+            <fillColor r="255" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <connection identifier="id-e9d3e7c62fc84a09bc9c57b8dcdf2191" relationshipRef="id-bc4256f21e5348429d434dde3cb49f88" xsi:type="Relationship" source="id-3911f7bf25404d648ccfee29b1e1e30c" target="id-57369d356c9c4349be6e5d40a2149491">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="264" y="132" />
+          <bendpoint x="264" y="288" />
+        </connection>
+      </view>
+    </diagrams>
+  </views>
+</model>
