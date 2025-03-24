@@ -472,35 +472,6 @@ function snapToRectangleEdge(point: IPoint, rect: IRectangle, _referencePoint: I
 }
 
 /**
- * Create a 90-degree bend between two points
- * @param start Start point
- * @param end End point
- * @returns Array of points creating a 90-degree path
- */
-function create90DegreeBend(start: IPoint, end: IPoint): IPoint[] {
-  // Determine which dimension has the larger difference
-  const dx = Math.abs(end.x - start.x);
-  const dy = Math.abs(end.y - start.y);
-  
-  // Create a bend point at the appropriate position
-  if (dx >= dy) {
-    // Horizontal first, then vertical
-    return [
-      { x: start.x, y: start.y },
-      { x: end.x, y: start.y },
-      { x: end.x, y: end.y },
-    ];
-  } else {
-    // Vertical first, then horizontal
-    return [
-      { x: start.x, y: start.y },
-      { x: start.x, y: end.y },
-      { x: end.x, y: end.y },
-    ];
-  }
-}
-
-/**
  * Generate SVG for a connection/relationship with rectangle elements
  * @param sourceElement Source element rectangle {x, y, width, height}
  * @param targetElement Target element rectangle {x, y, width, height}
@@ -561,15 +532,56 @@ export function generateConnectionWithRectangles(
     pathPoints = pathPoints.concat(bendpoints);
     pathPoints.push(targetPoint);
   } else {
-    // No bendpoints, use direct connection
+    // No bendpoints, determine the best connection style
     
-    // Calculate direct intersections with source and target elements
-    const sourceIntersection = calculateIntersection(sourceCenter, targetCenter, sourceElement);
-    const targetIntersection = calculateIntersection(sourceCenter, targetCenter, targetElement);
+    // Check if shapes overlap horizontally or vertically
+    const horizontalOverlap = 
+      sourceElement.x < targetElement.x + targetElement.width && 
+      sourceElement.x + sourceElement.width > targetElement.x;
     
-    // Build direct path points
-    pathPoints.push(sourceIntersection || sourceCenter);
-    pathPoints.push(targetIntersection || targetCenter);
+    const verticalOverlap = 
+      sourceElement.y < targetElement.y + targetElement.height && 
+      sourceElement.y + sourceElement.height > targetElement.y;
+    
+    if (horizontalOverlap) {
+      // Shapes overlap horizontally - create a vertical connection
+      const sourceY = sourceElement.y > targetElement.y ? 
+        sourceElement.y : sourceElement.y + sourceElement.height;
+      const targetY = targetElement.y > sourceElement.y ? 
+        targetElement.y : targetElement.y + targetElement.height;
+      
+      // Calculate x-coordinate in the overlapping region
+      const overlapStart = Math.max(sourceElement.x, targetElement.x);
+      const overlapEnd = Math.min(sourceElement.x + sourceElement.width, targetElement.x + targetElement.width);
+      const midX = (overlapStart + overlapEnd) / 2;
+      
+      // Create straight vertical connection
+      pathPoints.push({ x: midX, y: sourceY });
+      pathPoints.push({ x: midX, y: targetY });
+    } else if (verticalOverlap) {
+      // Shapes overlap vertically - create a horizontal connection
+      const sourceX = sourceElement.x > targetElement.x ? 
+        sourceElement.x : sourceElement.x + sourceElement.width;
+      const targetX = targetElement.x > sourceElement.x ? 
+        targetElement.x : targetElement.x + targetElement.width;
+      
+      // Calculate y-coordinate in the overlapping region
+      const overlapStart = Math.max(sourceElement.y, targetElement.y);
+      const overlapEnd = Math.min(sourceElement.y + sourceElement.height, targetElement.y + targetElement.height);
+      const midY = (overlapStart + overlapEnd) / 2;
+      
+      // Create straight horizontal connection
+      pathPoints.push({ x: sourceX, y: midY });
+      pathPoints.push({ x: targetX, y: midY });
+    } else {
+      // No overlap - calculate direct intersections
+      const sourceIntersection = calculateIntersection(sourceCenter, targetCenter, sourceElement);
+      const targetIntersection = calculateIntersection(sourceCenter, targetCenter, targetElement);
+      
+      // Build direct path points
+      pathPoints.push(sourceIntersection || sourceCenter);
+      pathPoints.push(targetIntersection || targetCenter);
+    }
   }
 
   // Remove any duplicate adjacent points
