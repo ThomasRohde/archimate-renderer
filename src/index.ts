@@ -6,14 +6,6 @@
  * A library for rendering ArchiMate models as SVG in both Node.js and browser environments
  */
 
-import { parseXml, getElementText, getElementAttribute } from './utils/xml-parser';
-import {
-  generateElement,
-  generateConnectionWithRectangles,
-  generateSvgDocument,
-} from './utils/svg-generator';
-import { escapeXml } from './utils/text-wrapper';
-import { processCompoundElements } from './utils/compound-element-detector';
 import type {
   IArchiMateElement,
   IArchiMateRelationship,
@@ -23,14 +15,17 @@ import type {
   IViewElementStyle,
   IViewRelationshipStyle,
 } from './types';
+import { processCompoundElements } from './utils/compound-element-detector';
+import {
+  generateConnectionWithRectangles,
+  generateElement,
+  generateSvgDocument,
+} from './utils/svg-generator';
+import { escapeXml } from './utils/text-wrapper';
+import { getElementAttribute, getElementText, parseXml } from './utils/xml-parser';
 
 // Export shape registry for customization
-export { shapeRegistry } from './utils/shape-registry';
-export {
-  ElementShapeGenerator,
-  ArrowHeadGenerator,
-  LineStyleGenerator,
-} from './utils/shape-registry';
+export { ArrowHeadGenerator, ElementShapeGenerator, LineStyleGenerator, shapeRegistry } from './utils/shape-registry';
 
 // Export shape templates for reuse
 export * from './utils/shape-templates';
@@ -40,6 +35,9 @@ export * from './utils/text-wrapper';
 
 // Export compound element detector utility
 export * from './utils/compound-element-detector';
+
+// Export Confluence embed functionality
+export * from './confluence-embed';
 
 // Types
 export interface IArchiMateRendererOptions {
@@ -942,3 +940,4 @@ export function renderArchiMateView(
 
 // Export types
 export * from './types';
+
